@@ -174,14 +174,6 @@ class Post(models.Model):
         default=0
     )
 
-    pinned_on_main_top = models.BooleanField(
-        default=False
-    )
-
-    pinned_on_main_bottom = models.BooleanField(
-        default=False
-    )
-
     def get_absolute_url(self):
         return reverse('posts', kwargs={'slug': self.slug})
 
@@ -189,6 +181,13 @@ class Post(models.Model):
         if not self.minutes_to_read:
             self.minutes_to_read = math.ceil(len(self.text) / READ_SPEED)
         super().save(*args, **kwargs)
+
+    pinned_on_main_top = models.BooleanField(
+        default=False
+    )
+    pinned_on_main_bottom = models.BooleanField(
+        default=False
+    )
 
     @property
     def category_links(self):

@@ -6,10 +6,9 @@
         <div class="row">
           <div class="col-lg-9">
             <div class="section-title">
-              <span class="caption d-block small">Categories</span>
-              <h2>{{ object.title }}</h2>
+              <h2>All posts</h2>
             </div>
-              {% for post in object.category_posts.all %}
+              {% for post in posts_list %}
             <div class="post-entry-2 d-flex">
               <div class="thumbnail order-md-2" style="background-image: url('/{{ post.preview }}')"></div>
               <div class="contents order-md-1 pl-0">

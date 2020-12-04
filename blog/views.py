@@ -30,9 +30,10 @@ class PostListView(ListView):
     List of posts
     """
     model = Post
-    paginate_by = 10
-    template_name = 'categories.html'
+    paginate_by = 5
+    template_name = 'all_posts.html'
     queryset = Post.objects.all()
+    context_object_name = 'posts_list'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -101,6 +102,12 @@ class MainPage(TemplateView):
         context.update({'next_three_posts': next_three_posts})
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
+        pinned_on_main_top_post = Post.objects.filter(
+            pinned_on_main_top=True).first()
+        context.update({'pinned_on_main_top_post': pinned_on_main_top_post})
+        pinned_on_main_bottom_post = Post.objects.filter(
+            pinned_on_main_bottom=True).first()
+        context.update({'pinned_on_main_bottom_post': pinned_on_main_bottom_post})
 
         return context
 
