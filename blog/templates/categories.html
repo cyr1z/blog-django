@@ -28,15 +28,25 @@
         </div>
 
         <div class="row">
+            {% block pagination %}
+
           <div class="col-lg-6">
+            {% if is_paginated %}
             <ul class="custom-pagination list-unstyled">
-              <li><a href="#">1</a></li>
-              <li class="active">2</li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
+                {% if page_obj.has_previous %}
+              <li><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                {% endif %}
+              <li class="active">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</li>
+              {% if page_obj.has_next %}
+                <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                  {% endif %}
+{#              <li><a href="#">4</a></li>#}
             </ul>
+            {% endif %}
           </div>
+                {% endblock %}
         </div>
+
       </div>
     </div>
 
