@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
 
     <div class="site-section">
       <div class="container">
@@ -9,7 +10,7 @@
               <span class="caption d-block small">Categories</span>
               <h2>{{ object.title }}</h2>
             </div>
-              {% for post in object.category_posts.all %}
+              {% for post in posts %}
             <div class="post-entry-2 d-flex">
               <div class="thumbnail order-md-2" style="background-image: url('/{{ post.preview }}')"></div>
               <div class="contents order-md-1 pl-0">
@@ -31,18 +32,16 @@
             {% block pagination %}
 
           <div class="col-lg-6">
-            {% if is_paginated %}
             <ul class="custom-pagination list-unstyled">
-                {% if page_obj.has_previous %}
-              <li><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                {% if posts.has_previous %}
+              <li><a href="{{ request.path }}?page={{ posts.previous_page_number }}">{{ posts.previous_page_number }}</a></li>
                 {% endif %}
-              <li class="active">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</li>
-              {% if page_obj.has_next %}
-                <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+              <li class="active">{{ posts.number }} of {{ posts.paginator.num_pages }}.</li>
+              {% if posts.has_next %}
+                <li><a href="{{ request.path }}?page={{ posts.next_page_number }}">{{ posts.next_page_number }}</a></li>
                   {% endif %}
 {#              <li><a href="#">4</a></li>#}
             </ul>
-            {% endif %}
           </div>
                 {% endblock %}
         </div>

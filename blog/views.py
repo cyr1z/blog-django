@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views import View
+from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from blog.forms import SignUpForm
@@ -37,8 +37,10 @@ class PostListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
         categories = {_.title: _.slug for _ in Category.objects.all()}
         context.update({'categories': categories})
+        # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
         return context
@@ -58,8 +60,10 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
         categories = {_.title: _.slug for _ in Category.objects.all()}
         context.update({'categories': categories})
+        # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
         return context
@@ -72,17 +76,20 @@ class CategoryDetailView(DetailView):
     model = Category
     template_name = 'categories.html'
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super(CategoryDetailView, self).get_context_data()
-    #     posts = object.
-    #     context.update({'category_posts': posts})
-    #     return context
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
         categories = {_.title: _.slug for _ in Category.objects.all()}
         context.update({'categories': categories})
+        # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
+        # add posts pagination
+        all_posts = self.get_object().category_posts.all()
+        paginator = Paginator(all_posts, 5)
+        page = self.request.GET.get('page', 1)
+        posts = paginator.get_page(page)
+        context.update({'posts': posts})
         return context
 
 
@@ -94,22 +101,26 @@ class MainPage(TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
         categories = {_.title: _.slug for _ in Category.objects.all()}
         context.update({'categories': categories})
+        # add latest post
         latest_post = Post.objects.order_by('-published_at').first()
         context.update({'latest_post': latest_post})
+        # add 3 next latest posts
         next_three_posts = Post.objects.all().order_by('-published_at')[1:4]
         context.update({'next_three_posts': next_three_posts})
+        # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
+        # add pinned top post
         pinned_on_main_top_post = Post.objects.filter(
             pinned_on_main_top=True).first()
         context.update({'pinned_on_main_top_post': pinned_on_main_top_post})
+        # add pinned bottom post
         pinned_on_main_bottom_post = Post.objects.filter(
             pinned_on_main_bottom=True).first()
-        context.update({'pinned_on_main_bottom_post': pinned_on_main_bottom_post})
+        context.update(
+            {'pinned_on_main_bottom_post': pinned_on_main_bottom_post})
 
         return context
-
-
-
