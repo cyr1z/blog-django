@@ -1,8 +1,10 @@
 from django.urls import path, include
-# from rest_framework.routers import DefaultRouter
-#
-# router = DefaultRouter()
-# router.register(r'users_api', UserViewSet)
+from rest_framework.routers import DefaultRouter
+
+from blog.API.resources import PostViewSet
+
+router = DefaultRouter()
+router.register(r'post_api', PostViewSet)
 # router.register(r'purchases_api', PurchaseViewSet)
 # router.register(r'product_api', ProductViewSet)
 # router.register(r'product_reverse_api', ProductReverseViewSet,
@@ -20,8 +22,6 @@ urlpatterns = [
     path('categories/<slug:slug>/', CategoryDetailView.as_view(),
          name='category_details'),
     path('contact/', Contact.as_view(), name='contact'),
-
-    # path('manage/<int:pk>/', ReturnManage.as_view(), name='manage'),
-    # path('', include(router.urls)),
+    path('', include(router.urls)),
 
 ]
