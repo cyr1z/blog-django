@@ -8,7 +8,7 @@ from django.urls import path, include
 # router.register(r'product_reverse_api', ProductReverseViewSet,
 #                 basename='rev_prod')
 from blog.views import UserLogin, UserLogout, Register, MainPage, \
-    PostDetailView, PostListView, CategoryDetailView
+    PostDetailView, PostListView, CategoryDetailView, Contact
 
 urlpatterns = [
     path('login/', UserLogin.as_view(), name="login"),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('posts/', PostListView.as_view(), name='posts_list'),
     path('categories/<slug:slug>/', CategoryDetailView.as_view(),
          name='category_details'),
+    path('contact/', Contact.as_view(), name='contact'),
 
     # path('manage/<int:pk>/', ReturnManage.as_view(), name='manage'),
     # path('', include(router.urls)),

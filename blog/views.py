@@ -124,3 +124,18 @@ class MainPage(TemplateView):
             {'pinned_on_main_bottom_post': pinned_on_main_bottom_post})
 
         return context
+
+
+class Contact(TemplateView):
+    """
+     main page
+     """
+    template_name = 'contact.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
+        categories = {_.title: _.slug for _ in Category.objects.all()}
+        context.update({'categories': categories})
+
+        return context

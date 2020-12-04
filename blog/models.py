@@ -161,9 +161,7 @@ class Post(models.Model):
     is_published = models.BooleanField(
         default=True
     )
-    is_trending = models.BooleanField(
-        default=True
-    )
+
     minutes_to_read = models.IntegerField(
         default=0
     )
