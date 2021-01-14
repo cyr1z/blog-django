@@ -105,7 +105,7 @@
                                 </li>
                                 {% for category, slug in categories.items %}
                                     <li>
-                                        <a href="/categories/{{ slug }}"
+                                        <a href="{% url 'category_details' slug %}"
                                            class="nav-link text-left">{{ category }}</a>
                                     </li>
                                 {% endfor %}

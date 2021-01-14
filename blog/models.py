@@ -37,6 +37,8 @@ class BlogUser(AbstractUser):
         max_length=120
     )
 
+    # slug = AutoSlugField(populate_from='username', default=username)
+
     @property
     def full_name(self):
         if self.get_full_name():
@@ -193,7 +195,9 @@ class Post(models.Model):
         for num, c in enumerate(self.categories.all()):
             if num:
                 result += ', '
-            result += f'<a href="/categories/{c.slug}">{c.title}</a>'
+            result += '<a href="' \
+                      + reverse('category_details', args=[c.slug]) \
+                      + f'">{c.title}</a>'
         return result
 
     @property
@@ -202,7 +206,9 @@ class Post(models.Model):
         for num, c in enumerate(self.tags.all()):
             if num:
                 result += ', '
-            result += f'<a href="/tag/{c.slug}">#{c.title}</a>'
+            result += '<a href="' \
+                      + reverse('tag_details', args=[c.slug]) \
+                      + f'">#{c.title}</a>'
         return result
 
     def increment_view_count(self):

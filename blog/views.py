@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from blog.forms import SignUpForm
-from blog.models import Post, Category, Tag
+from blog.models import Post, Category, Tag, BlogUser
 
 
 class UserLogin(LoginView):
@@ -23,6 +23,21 @@ class UserLogout(LoginRequiredMixin, LogoutView):
     """ Logout """
     next_page = '/'
     redirect_field_name = 'next'
+
+
+class AuthorDetailView(DetailView):
+    model = BlogUser
+    template_name = 'author.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
+        categories = {_.title: _.slug for _ in Category.objects.all()}
+        context.update({'categories': categories})
+        # add popular posts for right column
+        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
+        context.update({'most_popular_posts': most_popular_posts})
+        return context
 
 
 class PostListView(ListView):

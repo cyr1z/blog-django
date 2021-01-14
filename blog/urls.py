@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 
 from blog.API.resources import PostViewSet
 from blog.views import UserLogin, UserLogout, Register, MainPage, \
-    PostDetailView, PostListView, CategoryDetailView, Contact, TagDetailView
+    PostDetailView, PostListView, CategoryDetailView, Contact, TagDetailView, \
+    AuthorDetailView
 
 router = DefaultRouter()
 router.register(r'post_api', PostViewSet)
@@ -21,5 +22,6 @@ urlpatterns = [
          name='tag_details'),
     path('contact/', Contact.as_view(), name='contact'),
     path('', include(router.urls)),
-
+    path('author/<int:pk>/', AuthorDetailView.as_view(),
+         name='author'),
 ]
