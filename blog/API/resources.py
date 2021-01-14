@@ -8,4 +8,4 @@ from blog.models import Post
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    authentication_classes = [BasicAuthentication,]
+    authentication_classes = [BasicAuthentication, ]

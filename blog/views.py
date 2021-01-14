@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from blog.forms import SignUpForm
-from blog.models import Post, Category
+from blog.models import Post, Category, Tag
 
 
 class UserLogin(LoginView):
@@ -86,6 +86,30 @@ class CategoryDetailView(DetailView):
         context.update({'most_popular_posts': most_popular_posts})
         # add posts pagination
         all_posts = self.get_object().category_posts.all()
+        paginator = Paginator(all_posts, 5)
+        page = self.request.GET.get('page', 1)
+        posts = paginator.get_page(page)
+        context.update({'posts': posts})
+        return context
+
+
+class TagDetailView(DetailView):
+    """
+    List of products
+        """
+    model = Tag
+    template_name = 'categories.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
+        categories = {_.title: _.slug for _ in Category.objects.all()}
+        context.update({'categories': categories})
+        # add popular posts for right column
+        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
+        context.update({'most_popular_posts': most_popular_posts})
+        # add posts pagination
+        all_posts = self.get_object().tag_posts.all()
         paginator = Paginator(all_posts, 5)
         page = self.request.GET.get('page', 1)
         posts = paginator.get_page(page)

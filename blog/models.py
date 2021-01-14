@@ -196,6 +196,15 @@ class Post(models.Model):
             result += f'<a href="/categories/{c.slug}">{c.title}</a>'
         return result
 
+    @property
+    def tags_links(self):
+        result = ''
+        for num, c in enumerate(self.tags.all()):
+            if num:
+                result += ', '
+            result += f'<a href="/tag/{c.slug}">#{c.title}</a>'
+        return result
+
     def increment_view_count(self):
         self.views += 1
         self.save()
