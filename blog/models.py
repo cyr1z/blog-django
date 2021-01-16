@@ -11,6 +11,9 @@ from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_STANDARD
 from django.urls import reverse
 
+from django.contrib.contenttypes.fields import GenericRelation
+
+
 
 class BlogUser(AbstractUser):
     """
@@ -215,6 +218,9 @@ class Post(models.Model):
         self.views += 1
         self.save()
 
+    # the field name should be comments
+    # comments = GenericRelation(Comment)
+
     def __str__(self):
         return f'{self.title} / Author: {self.user.full_name} ' \
                f'/ Created: {self.created_at} / ' \
@@ -281,12 +287,12 @@ class Comment(models.Model):
         null=True,
         related_name='post_comments'
     )
-    parent = models.ForeignKey(
-        'blog.Comment',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name='comment_comments'
-    )
+    # parent = models.ForeignKey(
+    #     'blog.Comment',
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     related_name='comment_comments'
+    # )
     created_at = models.DateTimeField(
         default=timezone.now
     )
@@ -302,12 +308,12 @@ class Comment(models.Model):
     active = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['created_on']
+        ordering = ['created_at']
         verbose_name = 'Post Comment'
         verbose_name_plural = 'Post Comments'
 
     def __str__(self):
-        return f'Comment {self.user}: {self.text}'
+        return f'{self.user.full_name} to {self.post.title}: {self.text}'
 
     def deactivate(self):
         self.active = False

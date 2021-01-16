@@ -1,15 +1,17 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, TemplateView, \
     DetailView, FormView
 
-from blog.forms import SignUpForm, EmailForm
-from blog.models import Post, Category, Tag, BlogUser
+from blog.forms import SignUpForm, CreateCommentForm
+from blog.models import Post, Category, Tag, BlogUser, Comment
 
 
 class UserLogin(LoginView):
@@ -86,6 +88,13 @@ class PostDetailView(DetailView):
         # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
+        # add comment_form
+        comment_form = CreateCommentForm(self.request.POST or None)
+        comment_form.fields['text'].widget.attrs.update(
+            {'class': 'form-control'})
+        context.update({'add_comment_form': comment_form})
+        # add comments_count
+        context.update({'comments_count': self.object.post_comments.count()})
         return context
 
 
@@ -180,14 +189,37 @@ class Contact(TemplateView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         # add categories for main menu and form
         categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories, 'form': EmailForm})
+        context.update({'categories': categories})
+        # context.update({'form': EmailForm})
+
         return context
 
-    def post(self):
-        form = EmailForm(self.request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            msg = EmailMessage()
-        messages.success(self.request, 'Your message sent')
-        return HttpResponseRedirect(reverse('contact'))
+    # def post(self):
+    #     form = EmailForm(self.request.POST)
+    #     if form.is_valid():
+    #         cd = form.cleaned_data
+    #         msg = EmailMessage()
+    #     messages.success(self.request, 'Your message sent')
+    #     return HttpResponseRedirect(reverse('contact'))
 
+
+@method_decorator(login_required, name='dispatch')
+class CommentCreateView(CreateView):
+    """
+    Create comment
+    """
+    form_class = CreateCommentForm
+    model = Comment
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        slug = self.request.POST.get('slug')
+        post = Post.objects.get(slug=slug)
+        comment.post = post
+        comment.user = self.request.user
+        comment.save()
+        return super().form_valid(form=form)
+
+    def get_success_url(self):
+        slug = self.request.POST.get('slug')
+        return reverse('post_details', kwargs={'slug': slug})

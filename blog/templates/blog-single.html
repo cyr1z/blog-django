@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
     <div class="site-section">
       <div class="container">
         <div class="row">
@@ -29,113 +30,79 @@
       
       
                   <div class="pt-5">
+                  {% if comments_count %}
+
+
                     <div class="section-title">
-                      <h2 class="mb-5">6 Comments</h2>
+                      <h2 class="mb-5">{{ comments_count }} {% if comments_count == 1 %} Comment {% else %} Comments {% endif %}</h2>
                     </div>
                     <ul class="comment-list">
+                         {% for comment in object.post_comments.all %}
                       <li class="comment">
                         <div class="vcard bio">
-                          <img src="images/person_1.jpg" alt="Image placeholder">
+                          {{ comment.user.avatar|safe }}
                         </div>
                         <div class="comment-body">
-                          <h3>Jean Doe</h3>
-                          <div class="meta">January 9, 2018 at 2:21pm</div>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                          <p><a href="#" class="reply">Reply</a></p>
+                          <h3>{{ comment.user.full_name }}</h3>
+                          <div class="meta">{{ comment.created_at}}</div>
+                          <p>{{ comment.text }}</p>
                         </div>
+                          {% endfor %}
                       </li>
       
-                      <li class="comment">
-                        <div class="vcard bio">
-                          <img src="images/person_1.jpg" alt="Image placeholder">
-                        </div>
-                        <div class="comment-body">
-                          <h3>Jean Doe</h3>
-                          <div class="meta">January 9, 2018 at 2:21pm</div>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                          <p><a href="#" class="reply">Reply</a></p>
-                        </div>
-      
-                        <ul class="children">
-                          <li class="comment">
-                            <div class="vcard bio">
-                              <img src="images/person_1.jpg" alt="Image placeholder">
-                            </div>
-                            <div class="comment-body">
-                              <h3>Jean Doe</h3>
-                              <div class="meta">January 9, 2018 at 2:21pm</div>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                              <p><a href="#" class="reply">Reply</a></p>
-                            </div>
-      
-      
-                            <ul class="children">
-                              <li class="comment">
-                                <div class="vcard bio">
-                                  <img src="images/person_1.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                  <h3>Jean Doe</h3>
-                                  <div class="meta">January 9, 2018 at 2:21pm</div>
-                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                  <p><a href="#" class="reply">Reply</a></p>
-                                </div>
-      
-                                  <ul class="children">
-                                    <li class="comment">
-                                      <div class="vcard bio">
-                                        <img src="images/person_1.jpg" alt="Image placeholder">
-                                      </div>
-                                      <div class="comment-body">
-                                        <h3>Jean Doe</h3>
-                                        <div class="meta">January 9, 2018 at 2:21pm</div>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                        <p><a href="#" class="reply">Reply</a></p>
-                                      </div>
-                                    </li>
-                                  </ul>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-      
-                      <li class="comment">
-                        <div class="vcard bio">
-                          <img src="images/person_1.jpg" alt="Image placeholder">
-                        </div>
-                        <div class="comment-body">
-                          <h3>Jean Doe</h3>
-                          <div class="meta">January 9, 2018 at 2:21pm</div>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                          <p><a href="#" class="reply">Reply</a></p>
-                        </div>
-                      </li>
+
                     </ul>
+                  {% endif %}
                     <!-- END comment-list -->
                     
                     <div class="comment-form-wrap pt-5">
                       <div class="section-title">
-                        <h2 class="mb-5">Leave a comment</h2>
+                        <h2>Leave a comment</h2>
                       </div>
-                      <form action="#" class="p-5 bg-light">
-                        <div class="form-group">
-                          <label for="name">Name *</label>
-                          <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                          <label for="email">Email *</label>
-                          <input type="email" class="form-control" id="email">
-                        </div>
-                        <div class="form-group">
-                          <label for="website">Website</label>
-                          <input type="url" class="form-control" id="website">
-                        </div>
-      
-                        <div class="form-group">
+
+                      <form action="{% url 'comment' %}" method="post" class="p-5 bg-light">
+                      {% csrf_token %}
+                      <div class="comment"  ><span class="vcard bio" style="width: 60px;
+  height: 50px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  margin: 0;">
+                        <img src="/{{ request.user.avatar_image }}" alt="{{ request.user.full_name }}" style="
+  height: 50px;
+  position: relative;
+  display: inline-block;
+  border-radius: 50px;
+  overflow: hidden;
+  margin: 0;">
+                        </span>
+
+                            <span  style="font-size: 1.75rem; position: center; vertical-align: top;  display: inline-block;">{{ request.user.full_name }}</span></div>
+                      <input
+                            type="hidden" name="slug" value="{{ object.slug }}">
+                          {% for field in add_comment_form %}
+                              <div class="form-group">
                           <label for="message">Message</label>
-                          <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
-                        </div>
+                                {{ field }}
+                              </div>
+                            {% endfor %}
+{#                        <div class="form-group">#}
+{#                          <label for="name">Name *</label>#}
+{#                          <input type="text" class="form-control" id="name">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                          <label for="email">Email *</label>#}
+{#                          <input type="email" class="form-control" id="email">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                          <label for="website">Website</label>#}
+{#                          <input type="url" class="form-control" id="website">#}
+{#                        </div>#}
+{##}
+{#                        <div class="form-group">#}
+{#                          <label for="message">Message</label>#}
+{#                          <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>#}
+{#                        </div>#}
                         <div class="form-group">
                           <input type="submit" value="Post Comment" class="btn btn-primary py-3">
                         </div>
