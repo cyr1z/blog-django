@@ -70,11 +70,11 @@
                         <a href="#" class="d-inline-block p-3"><span
                                 class="icon-instagram"></span></a>
                     </div>
-                    <form action="#" class="search-form d-inline-block">
+                    <form action="{% url 'posts_list' %}" class="search-form d-inline-block">
 
                         <div class="d-flex">
-                            <input type="email" class="form-control"
-                                   placeholder="Search...">
+                            <input type="text" class="form-control"
+                                   placeholder="{% if request.GET.q %}{{ request.GET.q }}{% else %}Search...{% endif %}" name="q">
                             <button type="submit" class="btn btn-secondary">
                                 <span class="icon-search"></span></button>
                         </div>

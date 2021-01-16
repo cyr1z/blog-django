@@ -11,9 +11,6 @@ from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_STANDARD
 from django.urls import reverse
 
-from django.contrib.contenttypes.fields import GenericRelation
-
-
 
 class BlogUser(AbstractUser):
     """
@@ -318,4 +315,3 @@ class Comment(models.Model):
     def deactivate(self):
         self.active = False
         self.save()
-

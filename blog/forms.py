@@ -28,20 +28,16 @@ class SignUpForm(UserCreationForm):
                   'email', 'tg_name', 'password1', 'password2',)
 
 
-# class EmailForm(forms.Form):
-#     name = forms.CharField(max_length=25)
-#     last_name = forms.CharField(max_length=25)
-#     phone = PhoneNumberField(blank=True, null=True)
-#     email = forms.EmailField()
-#     to = forms.EmailField()
-#     text = forms.CharField(required=False, widget=forms.Textarea)
-
 class CreateCommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = [
             'text',
         ]
+
+
+class SearchBoxForm(forms.Form):
+    q = forms.CharField()
 
 
 

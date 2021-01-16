@@ -4,13 +4,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.generic import CreateView, ListView, TemplateView, \
     DetailView, FormView
+from django.views.generic.base import ContextMixin
 
-from blog.forms import SignUpForm, CreateCommentForm
+from blog.forms import SignUpForm, CreateCommentForm, SearchBoxForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
 
 
@@ -32,10 +35,7 @@ class UserLogout(LoginRequiredMixin, LogoutView):
     redirect_field_name = 'next'
 
 
-class AuthorDetailView(DetailView):
-    model = BlogUser
-    template_name = 'author.html'
-
+class AddSiteContentMixin(ContextMixin):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         # add categories for main menu
@@ -44,10 +44,17 @@ class AuthorDetailView(DetailView):
         # add popular posts for right column
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
+        # add search form
+        context.update({'search_form': SearchBoxForm})
         return context
 
 
-class PostListView(ListView):
+class AuthorDetailView(DetailView, AddSiteContentMixin):
+    model = BlogUser
+    template_name = 'author.html'
+
+
+class PostListView(ListView, AddSiteContentMixin):
     """
     List of posts
     """
@@ -57,18 +64,15 @@ class PostListView(ListView):
     queryset = Post.objects.all()
     context_object_name = 'posts_list'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
-        return context
+    def get_queryset(self):
+        search = self.request.GET.get('q')
+
+        if search:
+            return self.queryset.filter(Q(title__icontains=search))
+        return self.queryset
 
 
-class PostDetailView(DetailView):
+class PostDetailView(DetailView, AddSiteContentMixin):
     """
     List of products
         """
@@ -82,12 +86,6 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
         # add comment_form
         comment_form = CreateCommentForm(self.request.POST or None)
         comment_form.fields['text'].widget.attrs.update(
@@ -98,7 +96,7 @@ class PostDetailView(DetailView):
         return context
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(DetailView, AddSiteContentMixin):
     """
     List of products
         """
@@ -107,12 +105,6 @@ class CategoryDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
         # add posts pagination
         all_posts = self.get_object().category_posts.all()
         paginator = Paginator(all_posts, 5)
@@ -122,7 +114,7 @@ class CategoryDetailView(DetailView):
         return context
 
 
-class TagDetailView(DetailView):
+class TagDetailView(DetailView, AddSiteContentMixin):
     """
     List of products
         """
@@ -131,12 +123,6 @@ class TagDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
         # add posts pagination
         all_posts = self.get_object().tag_posts.all()
         paginator = Paginator(all_posts, 5)
@@ -146,7 +132,7 @@ class TagDetailView(DetailView):
         return context
 
 
-class MainPage(TemplateView):
+class MainPage(TemplateView, AddSiteContentMixin):
     """
     main page
     """
@@ -154,18 +140,12 @@ class MainPage(TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
         # add latest post
         latest_post = Post.objects.order_by('-published_at').first()
         context.update({'latest_post': latest_post})
         # add 3 next latest posts
         next_three_posts = Post.objects.all().order_by('-published_at')[1:4]
         context.update({'next_three_posts': next_three_posts})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
         # add pinned top post
         pinned_on_main_top_post = Post.objects.filter(
             pinned_on_main_top=True).first()
