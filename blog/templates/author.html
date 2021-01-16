@@ -42,10 +42,10 @@
             <div class="post-entry-2 d-flex">
               <div class="thumbnail order-md-2" style="background-image: url('/{{ post.preview }}')"></div>
               <div class="contents order-md-1 pl-0">
-                <h2><a href="/posts/{{ post.slug }}">{{ post.title }}</a></h2>
+                <h2><a href="{% url 'post_details' post.slug %}">{{ post.title }}</a></h2>
                 <p class="mb-3">{{ post.short_text }}</p>
                 <div class="post-meta">
-                  <span class="d-block"><a href="{% url 'author' object.id %}">{{ object.full_name }}</a> in {{ post.category_links|safe }}</span>
+                  <span class="d-block"><a href="{% url 'author' object.slug %}">{{ object.full_name }}</a> in {{ post.category_links|safe }}</span>
                   <span class="date-read"> {{ post.published_at }} <span class="mx-1">&bullet;</span> {{ post.minutes_to_read }} min read <span class="icon-star2"></span></span>
                 </div>
               </div>

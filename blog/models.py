@@ -37,7 +37,7 @@ class BlogUser(AbstractUser):
         max_length=120
     )
 
-    # slug = AutoSlugField(populate_from='username', default=username)
+    slug = AutoSlugField(populate_from='full_name')
 
     @property
     def full_name(self):
@@ -293,5 +293,23 @@ class Comment(models.Model):
     text = models.TextField(
         max_length=1000,
         null=True,
-        blank=True
+        blank=True,
+        verbose_name="text",
     )
+    updated = models.DateTimeField(
+        default=timezone.now
+    )
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['created_on']
+        verbose_name = 'Post Comment'
+        verbose_name_plural = 'Post Comments'
+
+    def __str__(self):
+        return f'Comment {self.user}: {self.text}'
+
+    def deactivate(self):
+        self.active = False
+        self.save()
+

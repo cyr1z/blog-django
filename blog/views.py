@@ -1,9 +1,14 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
-from django.views.generic import CreateView, ListView, TemplateView, DetailView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import CreateView, ListView, TemplateView, \
+    DetailView, FormView
 
-from blog.forms import SignUpForm
+from blog.forms import SignUpForm, EmailForm
 from blog.models import Post, Category, Tag, BlogUser
 
 
@@ -173,8 +178,16 @@ class Contact(TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
+        # add categories for main menu and form
         categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-
+        context.update({'categories': categories, 'form': EmailForm})
         return context
+
+    def post(self):
+        form = EmailForm(self.request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            msg = EmailMessage()
+        messages.success(self.request, 'Your message sent')
+        return HttpResponseRedirect(reverse('contact'))
+

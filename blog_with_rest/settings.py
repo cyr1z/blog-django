@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'crispy_forms',
     'rest_framework',
+    'phonenumber_field',
     # 'rest_framework.authtoken',
 ]
 
@@ -151,3 +152,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = ''
 MEDIA_URL = ''
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#gmail_send/settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'cloud@zolotarev.pp.ua'
+EMAIL_HOST_PASSWORD = 'wzjfdvywdyhlhqld' #past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'default from email'
+
+# send_mail('Django mail', 'This e-mail was sent with Django.', 'cloud@zolotarev.pp.ua', ['cyr@zolotarev.pp.ua'], fail_silently=False)

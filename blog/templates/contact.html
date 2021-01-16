@@ -9,6 +9,18 @@
               <h2>Contact Us</h2>
             </div>
             <form method="post">
+                <div class="row">
+                         {% if messages %}
+{#                        <ul class="messages">#}
+                        {% for message in messages %}
+                            <div{% if message.tags %} class="alert alert-success alert-dismissible fade show" role="alert"{% endif %}>
+                                {{ message }}
+                            {{ error|escape }}
+                            </div>
+                        {% endfor %}
+{#                        </ul>#}
+                    {% endif %}
+                </div>
               
                   <div class="row">
                       <div class="col-md-6 form-group">

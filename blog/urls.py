@@ -22,6 +22,6 @@ urlpatterns = [
          name='tag_details'),
     path('contact/', Contact.as_view(), name='contact'),
     path('', include(router.urls)),
-    path('author/<int:pk>/', AuthorDetailView.as_view(),
+    path('author/<slug:slug>/', AuthorDetailView.as_view(),
          name='author'),
 ]
