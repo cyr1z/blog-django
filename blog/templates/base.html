@@ -74,7 +74,7 @@
 
                         <div class="d-flex">
                             <input type="text" class="form-control"
-                                   placeholder="{% if request.GET.q %}{{ request.GET.q }}{% else %}Search...{% endif %}" name="q">
+                                   {% if request.GET.q %} value="{{ request.GET.q }}" {% else %} placeholder="Search..." {% endif %} name="q">
                             <button type="submit" class="btn btn-secondary">
                                 <span class="icon-search"></span></button>
                         </div>

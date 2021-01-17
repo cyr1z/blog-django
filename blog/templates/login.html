@@ -1,0 +1,39 @@
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} {{ title }} {% endblock title %}
+{% block content %}
+{% if not request.user.is_active %}
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4 offset-sm-2 offset-md-3 offset-lg-4">
+              <h1 class="mb-3 text-center">Please log in</h1>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button type="submit" class="btn btn-primary btn-block" value="Login"><i data-feather="log-in"></i> Log in</button>
+                </form>
+              <div class="text-center">
+                <p>or ...</p>
+                <a href="{% url 'register' %}" class="btn btn-success mb-3"><i data-feather="user-plus"></i> Create account</a>
+
+{#                  <div class="col-md-12"> <a class="btn  btn-light border border-primary" href="{% url "social:begin" "google-oauth2" %}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> </div>#}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% else %}
+
+    <section id="section-jumbotron" class="jumbotron jumbotron-fluid d-flex justify-content-center align-items-center">
+      <div class="container text-center">
+          <a href=" {% url 'logout' %} ">Logout</a>
+      </div>  
+    </section>
+
+{% endif %}
+
+{% endblock content %}

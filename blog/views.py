@@ -17,12 +17,24 @@ from blog.forms import SignUpForm, CreateCommentForm, SearchBoxForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
 
 
-class UserLogin(LoginView):
+class AddSiteContentMixin(ContextMixin):
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        # add categories for main menu
+        categories = {_.title: _.slug for _ in Category.objects.all()}
+        context.update({'categories': categories})
+        # add popular posts for right column
+        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
+        context.update({'most_popular_posts': most_popular_posts})
+        return context
+
+
+class UserLogin(LoginView, AddSiteContentMixin):
     """ login """
     template_name = 'login.html'
 
 
-class Register(CreateView):
+class Register(CreateView, AddSiteContentMixin):
     """ Sign UP """
     form_class = SignUpForm
     success_url = "/login/"
@@ -33,20 +45,6 @@ class UserLogout(LoginRequiredMixin, LogoutView):
     """ Logout """
     next_page = '/'
     redirect_field_name = 'next'
-
-
-class AddSiteContentMixin(ContextMixin):
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
-        # add search form
-        context.update({'search_form': SearchBoxForm})
-        return context
 
 
 class AuthorDetailView(DetailView, AddSiteContentMixin):
@@ -68,7 +66,8 @@ class PostListView(ListView, AddSiteContentMixin):
         search = self.request.GET.get('q')
 
         if search:
-            return self.queryset.filter(Q(title__icontains=search))
+            query = Q(title__icontains=search)
+            return self.queryset.filter(query)
         return self.queryset
 
 
@@ -159,7 +158,7 @@ class MainPage(TemplateView, AddSiteContentMixin):
         return context
 
 
-class Contact(TemplateView):
+class Contact(TemplateView, AddSiteContentMixin):
     """
      main page
      """
