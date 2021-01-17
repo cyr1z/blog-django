@@ -56,6 +56,9 @@
                     <!-- END comment-list -->
                     
                     <div class="comment-form-wrap pt-5">
+                    {% if request.user.is_authenticated %}
+
+
                       <div class="section-title">
                         <h2>Leave a comment</h2>
                       </div>
@@ -108,6 +111,11 @@
                         </div>
       
                       </form>
+                        {% else %}
+                        <label>Login for leave comment</label>
+                                          <div class="col-md-12"> <a class="btn  btn-light border border-primary" href="{% url "social:begin" "google-oauth2" %}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> </div>
+
+                    {% endif %}
                     </div>
                   </div>
           </div>

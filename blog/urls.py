@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path('author/<slug:slug>/', AuthorDetailView.as_view(),
          name='author'),
     path('comment/', CommentCreateView.as_view(), name="comment"),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]

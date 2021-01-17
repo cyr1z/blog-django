@@ -15,6 +15,7 @@ from django.views.generic.base import ContextMixin
 
 from blog.forms import SignUpForm, CreateCommentForm, SearchBoxForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
+# from blog_with_rest.settings import LOGIN_REDIRECT_URL
 
 
 class AddSiteContentMixin(ContextMixin):

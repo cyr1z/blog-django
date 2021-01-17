@@ -22,7 +22,7 @@ class BlogUser(AbstractUser):
     avatar_image = models.ImageField(
         verbose_name='Image',
         upload_to='static/users_images',
-        default='static/avatar.png',
+        default='avatar.png',
         null=True,
         blank=True
     )
@@ -32,13 +32,17 @@ class BlogUser(AbstractUser):
         blank=True
     )
     tg_name = models.CharField(
-        max_length=120
+        max_length=120,
+        null=True,
+        blank=True
     )
     tg_id = models.CharField(
-        max_length=120
+        max_length=120,
+        null=True,
+        blank=True
     )
 
-    slug = AutoSlugField(populate_from='full_name')
+    slug = AutoSlugField(populate_from='username')
 
     @property
     def full_name(self):
@@ -54,7 +58,7 @@ class BlogUser(AbstractUser):
         return mark_safe(img_string)
 
     class Meta:
-        unique_together = ["first_name", "last_name"]
+        # unique_together = ["first_name", "last_name"]
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
