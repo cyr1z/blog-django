@@ -7,7 +7,8 @@
                       <div class="row mt-5 align-items-center">
                     <div class="col-md-3 text-center mb-5">
                         <div class="avatar avatar-small">
-                            <img src="/{{ object.avatar_image }}" alt="{{ object.full_name }}" class="avatar-img rounded-circle" style="width: 80px;"/>
+                            {{ object.avatar|safe }}
+{#                            <img src="/{{ object.avatar_image }}" alt="{{ object.full_name }}" class="avatar-img rounded-circle" style="width: 80px;"/>#}
 {#                            {{ object.avatar|safe }}#}
                         </div>
                     </div>

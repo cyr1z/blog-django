@@ -88,6 +88,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+    'blog.pipeline.get_avatar',
+
 )
 
 
@@ -194,3 +196,8 @@ MINIMUM_QUESTIONS = 5
 GOOGLE_LOGIN_URL = '/auth/login/google-oauth2/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '310334247862-7h00um3ib92hh7ap6q6gavvhqi2mnrgm.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Qav53USgN2voc4QhcToPRZb1'
+
+SOCIAL_AUTH_CLEAN_USERNAMES = True
+
+DEFAULT_AVATAR = '/static/avatar.png'
+AVATAR_TEMPLATE = '<img src="{}" alt="{}" class="img-fluid" style="border-radius: 50%;">'

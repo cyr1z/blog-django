@@ -1,10 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-# from django.forms import ModelForm
-# from phonenumber_field.modelfields import PhoneNumberField
 from django.forms import ModelForm
 
-from blog.models import BlogUser, Comment
+from blog.models import BlogUser, Comment, Post
 
 
 class SignUpForm(UserCreationForm):
@@ -39,5 +37,17 @@ class CreateCommentForm(ModelForm):
 class SearchBoxForm(forms.Form):
     q = forms.CharField()
 
-
-
+#
+# class CreatePostForm(ModelForm):
+#     class Meta:
+#         model = Post
+#         fields = [
+#             'user',
+#             'tags',
+#             'title',
+#             'text',
+#             'categories',
+#             'preview',
+#             'pinned_on_main_top',
+#             'pinned_on_main_bottom',
+#         ]

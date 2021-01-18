@@ -65,19 +65,8 @@
 
                       <form action="{% url 'comment' %}" method="post" class="p-5 bg-light">
                       {% csrf_token %}
-                      <div class="comment"  ><span class="vcard bio" style="width: 60px;
-  height: 50px;
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  margin: 0;">
-                        <img src="/{{ request.user.avatar_image }}" alt="{{ request.user.full_name }}" style="
-  height: 50px;
-  position: relative;
-  display: inline-block;
-  border-radius: 50px;
-  overflow: hidden;
-  margin: 0;">
+                      <div class="comment"  ><span class="vcard bio" style="width: 50px; height: 50px; position: relative; display: inline-block; overflow: hidden; margin: 0;">
+                          {{ request.user.avatar|safe }}
                         </span>
 
                             <span  style="font-size: 1.75rem; position: center; vertical-align: top;  display: inline-block;">{{ request.user.full_name }}</span></div>
@@ -89,23 +78,7 @@
                                 {{ field }}
                               </div>
                             {% endfor %}
-{#                        <div class="form-group">#}
-{#                          <label for="name">Name *</label>#}
-{#                          <input type="text" class="form-control" id="name">#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                          <label for="email">Email *</label>#}
-{#                          <input type="email" class="form-control" id="email">#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                          <label for="website">Website</label>#}
-{#                          <input type="url" class="form-control" id="website">#}
-{#                        </div>#}
-{##}
-{#                        <div class="form-group">#}
-{#                          <label for="message">Message</label>#}
-{#                          <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>#}
-{#                        </div>#}
+
                         <div class="form-group">
                           <input type="submit" value="Post Comment" class="btn btn-primary py-3">
                         </div>
@@ -113,7 +86,7 @@
                       </form>
                         {% else %}
                         <label>Login for leave comment</label>
-                                          <div class="col-md-12"> <a class="btn  btn-light border border-primary" href="{% url "social:begin" "google-oauth2" %}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> </div>
+                                          <div class="col-md-12"> <a class="btn  btn-light border border-primary" href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> </div>
 
                     {% endif %}
                     </div>

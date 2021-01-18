@@ -1,12 +1,11 @@
 import math
 
 from autoslug import AutoSlugField
-from django.db.models import F
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
-from blog_with_rest.settings import READ_SPEED
+from blog_with_rest.settings import READ_SPEED, AVATAR_TEMPLATE, DEFAULT_AVATAR
 from django.core.exceptions import ValidationError
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_STANDARD
@@ -41,6 +40,7 @@ class BlogUser(AbstractUser):
         null=True,
         blank=True
     )
+    social_picture = models.TextField(blank=True, null=True)
 
     slug = AutoSlugField(populate_from='username')
 
@@ -53,12 +53,14 @@ class BlogUser(AbstractUser):
 
     @property
     def avatar(self):
-        img_url = self.avatar_image.url
-        img_string = f'<img src="{img_url}" alt="{self.full_name}">'
-        return mark_safe(img_string)
+        avatar_url = DEFAULT_AVATAR
+        if self.social_picture:
+            avatar_url = self.social_picture
+        elif self.avatar_image.url:
+            avatar_url = self.avatar_image.url
+        return mark_safe(AVATAR_TEMPLATE.format(avatar_url, self.full_name))
 
     class Meta:
-        # unique_together = ["first_name", "last_name"]
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
@@ -219,9 +221,6 @@ class Post(models.Model):
     def increment_view_count(self):
         self.views += 1
         self.save()
-
-    # the field name should be comments
-    # comments = GenericRelation(Comment)
 
     def __str__(self):
         return f'{self.title} / Author: {self.user.full_name} ' \

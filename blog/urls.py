@@ -7,6 +7,7 @@ from blog.views import UserLogin, UserLogout, Register, MainPage, \
     PostDetailView, PostListView, CategoryDetailView, TagDetailView, \
     AuthorDetailView, Contact, CommentCreateView
 
+
 router = DefaultRouter()
 router.register(r'post_api', PostViewSet)
 
@@ -26,5 +27,7 @@ urlpatterns = [
     path('author/<slug:slug>/', AuthorDetailView.as_view(),
          name='author'),
     path('comment/', CommentCreateView.as_view(), name="comment"),
+    # path('podt_edit/<int:pk>/', PostUpdateView.as_view(), name="post_edit"),
+    # path('create_post/', CreatePostView.as_view(), name="create_post"),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]

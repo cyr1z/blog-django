@@ -6,11 +6,11 @@ from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView, ListView, TemplateView, \
-    DetailView, FormView
+    DetailView, FormView, UpdateView
 from django.views.generic.base import ContextMixin
 
 from blog.forms import SignUpForm, CreateCommentForm, SearchBoxForm
@@ -28,6 +28,8 @@ class AddSiteContentMixin(ContextMixin):
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
         return context
+
+
 
 
 class UserLogin(LoginView, AddSiteContentMixin):
@@ -203,3 +205,12 @@ class CommentCreateView(CreateView):
     def get_success_url(self):
         slug = self.request.POST.get('slug')
         return reverse('post_details', kwargs={'slug': slug})
+
+
+# @method_decorator(login_required, name='dispatch')
+# class CreatePostView(CreateView):
+#     """
+#         Create post
+#     """
+#     form_class = CreatePostForm
+#     template_name = 'post_edit.html'

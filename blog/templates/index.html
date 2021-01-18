@@ -57,7 +57,7 @@
                     <div class="post-meta">
                       <span class="d-block"><a href="{% url 'author' post.user.slug %}">{{ post.user.full_name }}</a> in
                         {{ post.category_links | safe }}</span>
-                      <span class="date-read">{{ post.published_at }}<span class="mx-1">&bullet;</span>{{ latest_post.minutes_to_read }} min read <span class="icon-star2"></span></span>
+                      <span class="date-read">{{ post.published_at }}<span class="mx-1">&bullet;</span>{{ post.minutes_to_read }} min read <span class="icon-star2"></span></span>
                     </div>
                   </div>
                 </div>{% endfor %}
@@ -89,5 +89,5 @@
         </div>
       </div>
     </div>
-
+        </div>
 {% endblock %}
