@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+    {% load blog_tags %}
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
@@ -96,24 +96,25 @@
                 <div class="d-flex align-items-center">
 
                     <div class="mr-auto">
-                        <nav class="site-navigation position-relative text-right"
-                             role="navigation">
-                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
-                                <li class="active">
-                                    <a href="/"
-                                       class="nav-link text-left">Home</a>
-                                </li>
-                                {% for category, slug in categories.items %}
-                                    <li>
-                                        <a href="{% url 'category_details' slug %}"
-                                           class="nav-link text-left">{{ category }}</a>
-                                    </li>
-                                {% endfor %}
-                                <li><a href="/contact"
-                                       class="nav-link text-left">Contact</a>
-                                </li>
-                            </ul>
-                        </nav>
+                        {% show_top_navigate %}
+{#                        <nav class="site-navigation position-relative text-right"#}
+{#                             role="navigation">#}
+{#                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">#}
+{#                                <li class="active">#}
+{#                                    <a href="/"#}
+{#                                       class="nav-link text-left">Home</a>#}
+{#                                </li>#}
+{#                                {% for category, slug in categories.items %}#}
+{#                                    <li>#}
+{#                                        <a href="{% url 'category_details' slug %}"#}
+{#                                           class="nav-link text-left">{{ category }}</a>#}
+{#                                    </li>#}
+{#                                {% endfor %}#}
+{#                                <li><a href="/contact"#}
+{#                                       class="nav-link text-left">Contact</a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </nav>#}
 
                     </div>
 

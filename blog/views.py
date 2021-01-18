@@ -12,24 +12,12 @@ from blog.forms import SignUpForm, CreateCommentForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
 
 
-class AddSiteContentMixin(ContextMixin):
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
-        # add popular posts for right column
-        most_popular_posts = Post.objects.all().order_by('-views')[0:5]
-        context.update({'most_popular_posts': most_popular_posts})
-        return context
-
-
-class UserLogin(LoginView, AddSiteContentMixin):
+class UserLogin(LoginView,):
     """ login """
     template_name = 'login.html'
 
 
-class Register(CreateView, AddSiteContentMixin):
+class Register(CreateView,):
     """ Sign UP """
     form_class = SignUpForm
     success_url = "/login/"
@@ -42,12 +30,12 @@ class UserLogout(LoginRequiredMixin, LogoutView):
     redirect_field_name = 'next'
 
 
-class AuthorDetailView(DetailView, AddSiteContentMixin):
+class AuthorDetailView(DetailView):
     model = BlogUser
     template_name = 'author.html'
 
 
-class PostListView(ListView, AddSiteContentMixin):
+class PostListView(ListView):
     """
     List of posts
     """
@@ -66,7 +54,7 @@ class PostListView(ListView, AddSiteContentMixin):
         return self.queryset
 
 
-class PostDetailView(DetailView, AddSiteContentMixin):
+class PostDetailView(DetailView):
     """
     Post detail
     """
@@ -97,7 +85,7 @@ class PostDetailView(DetailView, AddSiteContentMixin):
         return context
 
 
-class CategoryDetailView(DetailView, AddSiteContentMixin):
+class CategoryDetailView(DetailView):
     """
     List of category posts
     """
@@ -115,7 +103,7 @@ class CategoryDetailView(DetailView, AddSiteContentMixin):
         return context
 
 
-class TagDetailView(DetailView, AddSiteContentMixin):
+class TagDetailView(DetailView):
     """
     List of posts with the tag
     """
@@ -134,7 +122,7 @@ class TagDetailView(DetailView, AddSiteContentMixin):
         return context
 
 
-class MainPage(TemplateView, AddSiteContentMixin):
+class MainPage(TemplateView):
     """
     main page
     """
@@ -161,7 +149,7 @@ class MainPage(TemplateView, AddSiteContentMixin):
         return context
 
 
-class Contact(TemplateView, AddSiteContentMixin):
+class Contact(TemplateView):
     """
      main page
      """

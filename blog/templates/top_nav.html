@@ -1,0 +1,18 @@
+<nav class="site-navigation position-relative text-right"
+                             role="navigation">
+                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                                <li class="active">
+                                    <a href="/"
+                                       class="nav-link text-left">Home</a>
+                                </li>
+                                {% for category in categories %}
+                                    <li>
+                                        <a href="{% url 'category_details' category.slug %}"
+                                           class="nav-link text-left">{{ category.title }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li><a href="/contact"
+                                       class="nav-link text-left">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
