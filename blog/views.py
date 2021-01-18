@@ -1,21 +1,15 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
-from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.db.models import Q, Count
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.generic import CreateView, ListView, TemplateView, \
-    DetailView, FormView, UpdateView
+from django.views.generic import CreateView, ListView, TemplateView, DetailView
 from django.views.generic.base import ContextMixin
 
-from blog.forms import SignUpForm, CreateCommentForm, SearchBoxForm
+from blog.forms import SignUpForm, CreateCommentForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
-# from blog_with_rest.settings import LOGIN_REDIRECT_URL
 
 
 class AddSiteContentMixin(ContextMixin):
@@ -28,8 +22,6 @@ class AddSiteContentMixin(ContextMixin):
         most_popular_posts = Post.objects.all().order_by('-views')[0:5]
         context.update({'most_popular_posts': most_popular_posts})
         return context
-
-
 
 
 class UserLogin(LoginView, AddSiteContentMixin):
@@ -76,8 +68,8 @@ class PostListView(ListView, AddSiteContentMixin):
 
 class PostDetailView(DetailView, AddSiteContentMixin):
     """
-    List of products
-        """
+    Post detail
+    """
     model = Post
     template_name = 'blog-single.html'
 
@@ -95,13 +87,20 @@ class PostDetailView(DetailView, AddSiteContentMixin):
         context.update({'add_comment_form': comment_form})
         # add comments_count
         context.update({'comments_count': self.object.post_comments.count()})
+        # add similar posts
+        post_tags_ids = self.object.tags.values_list('id', flat=True)
+        similar_posts = Post.objects.filter(tags__in=post_tags_ids) \
+            .exclude(id=self.object.id)
+        similar_posts = similar_posts.annotate(same_tags=Count('tags')) \
+                            .order_by('-same_tags', '-published_at')[:2]
+        context.update({'similar_posts': similar_posts})
         return context
 
 
 class CategoryDetailView(DetailView, AddSiteContentMixin):
     """
-    List of products
-        """
+    List of category posts
+    """
     model = Category
     template_name = 'categories.html'
 
@@ -118,8 +117,9 @@ class CategoryDetailView(DetailView, AddSiteContentMixin):
 
 class TagDetailView(DetailView, AddSiteContentMixin):
     """
-    List of products
-        """
+    List of posts with the tag
+    """
+
     model = Tag
     template_name = 'categories.html'
 
@@ -169,20 +169,10 @@ class Contact(TemplateView, AddSiteContentMixin):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # add categories for main menu and form
         categories = {_.title: _.slug for _ in Category.objects.all()}
         context.update({'categories': categories})
-        # context.update({'form': EmailForm})
 
         return context
-
-    # def post(self):
-    #     form = EmailForm(self.request.POST)
-    #     if form.is_valid():
-    #         cd = form.cleaned_data
-    #         msg = EmailMessage()
-    #     messages.success(self.request, 'Your message sent')
-    #     return HttpResponseRedirect(reverse('contact'))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -205,12 +195,3 @@ class CommentCreateView(CreateView):
     def get_success_url(self):
         slug = self.request.POST.get('slug')
         return reverse('post_details', kwargs={'slug': slug})
-
-
-# @method_decorator(login_required, name='dispatch')
-# class CreatePostView(CreateView):
-#     """
-#         Create post
-#     """
-#     form_class = CreatePostForm
-#     template_name = 'post_edit.html'
