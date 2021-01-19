@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, \
+    SearchRank
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.urls import reverse
@@ -46,12 +47,15 @@ class PostListView(ListView):
     context_object_name = 'posts_list'
 
     def get_queryset(self):
-        search = self.request.GET.get('q')
+        search_query = self.request.GET.get('q')
 
-        if search:
+        if search_query:
+            search_query = SearchQuery(search_query)
+            search_vector = SearchVector('title', 'text')
             return Post.objects.annotate(
-                search=SearchVector('title', 'text'),)\
-                .filter(search=search)
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by('-rank')
 
         return self.queryset
 
