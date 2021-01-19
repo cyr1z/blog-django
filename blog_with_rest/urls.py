@@ -20,6 +20,7 @@ from blog.models import Post
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import GenericSitemap
 from blog.sitemaps import StaticViewSitemap
+from blog.feeds import BlogFeed
 
 sitemaps = {
     'blog': GenericSitemap({
@@ -34,6 +35,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap,
          {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
+    path("feed/", BlogFeed(), name="feed"),
     path('admin/', admin.site.urls),
 
 ]
