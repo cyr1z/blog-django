@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.postgres.search import SearchVector
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.urls import reverse
@@ -48,8 +49,10 @@ class PostListView(ListView):
         search = self.request.GET.get('q')
 
         if search:
-            query = Q(title__icontains=search)
-            return self.queryset.filter(query)
+            return Post.objects.annotate(
+                search=SearchVector('title', 'text'),)\
+                .filter(search=search)
+
         return self.queryset
 
 

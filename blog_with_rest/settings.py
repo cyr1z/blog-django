@@ -42,8 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonenumber_field',
     'social_django',
-    # 'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.postgres',
+    # 'django.contrib.sites',
     # 'rest_framework.authtoken',
 ]
 
