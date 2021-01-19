@@ -182,7 +182,7 @@ class Post(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse('posts', kwargs={'slug': self.slug})
+        return reverse('post_details', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         if not self.minutes_to_read:

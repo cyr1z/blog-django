@@ -16,7 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from blog.models import Post
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import GenericSitemap
+from blog.sitemaps import StaticViewSitemap
+
+sitemaps = {
+    'blog': GenericSitemap({
+        'queryset': Post.objects.all(),
+        'date_field': 'published_at',
+    }, priority=0.9),
+    # 'static': StaticViewSitemap,
+}
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('blog.urls')),
+    path('sitemap.xml', sitemap,
+         {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
+    path('admin/', admin.site.urls),
+
 ]

@@ -1,4 +1,6 @@
+import markdown
 from django import template
+from django.utils.safestring import mark_safe
 
 from blog.models import Category, Post
 
@@ -20,3 +22,8 @@ def show_top_navigate():
 def show_most_popular_posts(count=5):
     most_popular_posts = Post.objects.all().order_by('-views')[0:count]
     return {'most_popular_posts': most_popular_posts}
+
+
+@register.filter(name='markdown')
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))

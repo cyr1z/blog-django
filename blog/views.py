@@ -6,18 +6,17 @@ from django.db.models import Q, Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
-from django.views.generic.base import ContextMixin
 
 from blog.forms import SignUpForm, CreateCommentForm
 from blog.models import Post, Category, Tag, BlogUser, Comment
 
 
-class UserLogin(LoginView,):
+class UserLogin(LoginView, ):
     """ login """
     template_name = 'login.html'
 
 
-class Register(CreateView,):
+class Register(CreateView, ):
     """ Sign UP """
     form_class = SignUpForm
     success_url = "/login/"
@@ -77,10 +76,12 @@ class PostDetailView(DetailView):
         context.update({'comments_count': self.object.post_comments.count()})
         # add similar posts
         post_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_posts = Post.objects.filter(tags__in=post_tags_ids) \
-            .exclude(id=self.object.id)
-        similar_posts = similar_posts.annotate(same_tags=Count('tags')) \
-                            .order_by('-same_tags', '-published_at')[:2]
+        similar_posts = Post.objects.filter(
+            tags__in=post_tags_ids
+        ).exclude(id=self.object.id)
+        similar_posts = similar_posts.annotate(
+            same_tags=Count('tags')
+        ).order_by('-same_tags', '-published_at')[:2]
         context.update({'similar_posts': similar_posts})
         return context
 
@@ -104,10 +105,6 @@ class CategoryDetailView(DetailView):
 
 
 class TagDetailView(DetailView):
-    """
-    List of posts with the tag
-    """
-
     model = Tag
     template_name = 'categories.html'
 

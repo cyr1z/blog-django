@@ -42,8 +42,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonenumber_field',
     'social_django',
+    # 'django.contrib.sites',
+    'django.contrib.sitemaps',
     # 'rest_framework.authtoken',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
