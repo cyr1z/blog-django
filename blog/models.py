@@ -1,5 +1,5 @@
 import math
-
+from unidecode import unidecode
 from autoslug import AutoSlugField
 from django.utils import timezone
 from django.db import models
@@ -96,7 +96,11 @@ class Category(models.Model):
         default=True
     )
 
-    slug = AutoSlugField(populate_from='title')
+    @property
+    def unicode_title(self):
+        return unidecode(self.title)
+
+    slug = AutoSlugField(populate_from='unicode_title')
 
     @property
     def posts(self):
@@ -117,7 +121,11 @@ class Tag(models.Model):
         max_length=120
     )
 
-    slug = AutoSlugField(populate_from='title')
+    @property
+    def unicode_title(self):
+        return unidecode(self.title)
+
+    slug = AutoSlugField(populate_from='unicode_title')
 
     def get_absolute_url(self):
         return reverse('tags', kwargs={'slug': self.slug})
@@ -184,7 +192,11 @@ class Post(models.Model):
         default=0
     )
 
-    slug = AutoSlugField(populate_from='title')
+    @property
+    def unicode_title(self):
+        return unidecode(self.title)
+
+    slug = AutoSlugField(populate_from='unicode_title')
 
     views = models.PositiveIntegerField(
         default=0

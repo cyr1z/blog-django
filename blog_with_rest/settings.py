@@ -171,10 +171,10 @@ USE_TZ = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-STATIC_URL = "/static/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
+STATIC_URL = '/static/'
+STATIC_ROOT = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/'
 
 
 AUTHENTICATION_BACKENDS = (
@@ -193,8 +193,7 @@ LOGOUT_REDIRECT_URL = '/'
 TORDERINGS = ['created_at', '-created_at']
 DEFAULT_TESTS_ORDERING = 'created_at'
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
 
 MINIMUM_QUESTIONS = 5
 
