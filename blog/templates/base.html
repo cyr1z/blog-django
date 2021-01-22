@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     {% load blog_tags %}
+    {% load static %}
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
@@ -69,6 +70,8 @@
                                 class="icon-twitter"></span></a>
                         <a href="#" class="d-inline-block p-3"><span
                                 class="icon-instagram"></span></a>
+                        <a href="{% url 'feed' %}" class="d-inline-block p-3"><span
+                                class="icon-rss"></span></a>
                     </div>
                     <form action="{% url 'posts_list' %}" class="search-form d-inline-block">
 
@@ -97,24 +100,7 @@
 
                     <div class="mr-auto">
                         {% show_top_navigate %}
-{#                        <nav class="site-navigation position-relative text-right"#}
-{#                             role="navigation">#}
-{#                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">#}
-{#                                <li class="active">#}
-{#                                    <a href="/"#}
-{#                                       class="nav-link text-left">Home</a>#}
-{#                                </li>#}
-{#                                {% for category, slug in categories.items %}#}
-{#                                    <li>#}
-{#                                        <a href="{% url 'category_details' slug %}"#}
-{#                                           class="nav-link text-left">{{ category }}</a>#}
-{#                                    </li>#}
-{#                                {% endfor %}#}
-{#                                <li><a href="/contact"#}
-{#                                       class="nav-link text-left">Contact</a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </nav>#}
+
 
                     </div>
 

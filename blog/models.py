@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
+
 from blog_with_rest.settings import READ_SPEED, AVATAR_TEMPLATE, DEFAULT_AVATAR
 from django.core.exceptions import ValidationError
 from markdownfield.models import MarkdownField, RenderedMarkdownField
@@ -20,8 +21,7 @@ class BlogUser(AbstractUser):
     """
     avatar_image = models.ImageField(
         verbose_name='Image',
-        upload_to='static/users_images',
-        default='avatar.png',
+        upload_to='users_images/',
         null=True,
         blank=True
     )
@@ -56,8 +56,11 @@ class BlogUser(AbstractUser):
         avatar_url = DEFAULT_AVATAR
         if self.social_picture:
             avatar_url = self.social_picture
-        elif self.avatar_image.url:
-            avatar_url = self.avatar_image.url
+        else:
+            try:
+                avatar_url = self.avatar_image.url
+            except ValueError:
+                pass
         return mark_safe(AVATAR_TEMPLATE.format(avatar_url, self.full_name))
 
     class Meta:
@@ -82,7 +85,7 @@ class Category(models.Model):
     )
     image = models.ImageField(
         verbose_name='Image',
-        upload_to='static/categories_images',
+        upload_to='categories_images/',
         default='static/category.png',
         null=True,
         blank=True
@@ -138,13 +141,17 @@ class Post(models.Model):
     tags = models.ManyToManyField(
         Tag,
         related_name='tag_posts',
+        null=True,
+        blank=True,
     )
     title = models.CharField(
         max_length=120
     )
     text = MarkdownField(
         rendered_field='text_rendered',
-        validator=VALIDATOR_STANDARD
+        validator=VALIDATOR_STANDARD,
+        null=True,
+        blank=True,
     )
 
     @property
@@ -156,7 +163,7 @@ class Post(models.Model):
     text_rendered = RenderedMarkdownField()
     preview = models.ImageField(
         verbose_name='Image',
-        upload_to='static/posts_images',
+        upload_to='posts_images/',
         default='static/post.png',
         null=True,
         blank=True
@@ -254,12 +261,12 @@ class Content(models.Model):
     )
     image = models.ImageField(
         verbose_name='Image',
-        upload_to='static/contents_files',
+        upload_to='contents_files/',
         null=True,
         blank=True
     )
     file = models.FileField(
-        upload_to='static/contents_files',
+        upload_to='contents_files/',
     )
     link = models.URLField(
         max_length=800

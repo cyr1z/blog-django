@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 from blog.models import Post
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import GenericSitemap
-from blog.sitemaps import StaticViewSitemap
 from blog.feeds import BlogFeed
 
 sitemaps = {
@@ -38,4 +38,4 @@ urlpatterns = [
     path("feed/", BlogFeed(), name="feed"),
     path('admin/', admin.site.urls),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

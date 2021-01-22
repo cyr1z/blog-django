@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     'social_django',
     'django.contrib.sitemaps',
     'django.contrib.postgres',
-    # 'django.contrib.sites',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
+    'mdeditor',
 ]
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -171,8 +172,8 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 STATIC_ROOT = ''
-MEDIA_URL = ''
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 AUTHENTICATION_BACKENDS = (

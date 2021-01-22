@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load blog_tags %}
+{% block content %}
+
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row">
+                {% block page_content %}
+                {% endblock %}
+                {% include "right-column-categories.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,10 +1,8 @@
-{% extends "base.html" %}
+{% extends "sub_base.html" %}
 {% load blog_tags %}
-{% block content %}
+{% block page_content %}
+        {% load static %}
 
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
           <div class="col-lg-8 single-content">
             
             <p class="mb-5">
@@ -113,11 +111,5 @@
           </div>
 
 
-          {% include "right-column-categories.html" %}
 
-
-        </div>
-        
-      </div>
-    </div>
   {% endblock %}

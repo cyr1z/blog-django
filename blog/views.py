@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.postgres.search import SearchVector, SearchQuery, \
     SearchRank
 from django.core.paginator import Paginator
-from django.db.models import Q, Count
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
@@ -136,19 +136,26 @@ class MainPage(TemplateView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         # add latest post
         latest_post = Post.objects.order_by('-published_at').first()
-        context.update({'latest_post': latest_post})
+        if latest_post:
+            context.update({'latest_post': latest_post})
         # add 3 next latest posts
         next_three_posts = Post.objects.all().order_by('-published_at')[1:4]
-        context.update({'next_three_posts': next_three_posts})
+        if next_three_posts:
+            context.update({'next_three_posts': next_three_posts})
         # add pinned top post
         pinned_on_main_top_post = Post.objects.filter(
             pinned_on_main_top=True).first()
-        context.update({'pinned_on_main_top_post': pinned_on_main_top_post})
+        if pinned_on_main_top_post:
+            context.update({
+                'pinned_on_main_top_post': pinned_on_main_top_post
+            })
         # add pinned bottom post
         pinned_on_main_bottom_post = Post.objects.filter(
             pinned_on_main_bottom=True).first()
-        context.update(
-            {'pinned_on_main_bottom_post': pinned_on_main_bottom_post})
+        if pinned_on_main_bottom_post:
+            context.update(
+                {'pinned_on_main_bottom_post': pinned_on_main_bottom_post}
+            )
 
         return context
 

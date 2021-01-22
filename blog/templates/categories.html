@@ -1,10 +1,8 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "sub_base.html" %}
+{% block page_content %}
 {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
 
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
+
           <div class="col-lg-9">
             <div class="section-title">
               <span class="caption d-block small">Categories</span>
@@ -23,12 +21,7 @@
               </div>
             </div>
             {% endfor %}
-
-          </div>
-          {% include "right-column-categories.html" %}
-        </div>
-
-        <div class="row">
+             <div class="block">
             {% block pagination %}
 
           <div class="col-lg-6">
@@ -40,13 +33,11 @@
               {% if posts.has_next %}
                 <li><a href="{{ request.path }}?page={{ posts.next_page_number }}">{{ posts.next_page_number }}</a></li>
                   {% endif %}
-{#              <li><a href="#">4</a></li>#}
             </ul>
           </div>
                 {% endblock %}
         </div>
 
-      </div>
-    </div>
+          </div>
 
   {% endblock %}
