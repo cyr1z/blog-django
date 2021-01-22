@@ -11,6 +11,8 @@ from django.core.exceptions import ValidationError
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_STANDARD
 from django.urls import reverse
+from ckeditor.fields import RichTextField
+from bs4 import BeautifulSoup
 
 
 class BlogUser(AbstractUser):
@@ -147,20 +149,20 @@ class Post(models.Model):
     title = models.CharField(
         max_length=120
     )
-    text = MarkdownField(
-        rendered_field='text_rendered',
-        validator=VALIDATOR_STANDARD,
-        null=True,
-        blank=True,
-    )
+
+    text = RichTextField(null=True, blank=True,)
+
+    @property
+    def clean_text(self):
+        return BeautifulSoup(self.text).get_text()
 
     @property
     def short_text(self):
-        d = self.text[200:]
+        clean_text = self.clean_text
+        d = clean_text[200:]
         t = d.split('.')
-        return self.text[:200] + t[0] + '...'
+        return clean_text[:200] + t[0] + '...'
 
-    text_rendered = RenderedMarkdownField()
     preview = models.ImageField(
         verbose_name='Image',
         upload_to='posts_images/',

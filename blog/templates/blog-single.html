@@ -20,7 +20,7 @@
                 <span class="date-read">{{ object.published_at }}<span class="mx-1">&bullet;</span> {{ object.minutes_to_read }} min read <span class="icon-star2"></span></span>
               </div>
             </div>
-{{ object.text|markdown }}
+{{ object.text|safe }}
             <div class="pt-5">
                     <p>Categories:  {{ object.category_links|safe }}  Tags:  {{ object.tags_links|safe }} </p>
                   </div>
