@@ -1,4 +1,6 @@
 import math
+
+from ckeditor_uploader.fields import RichTextUploadingField
 from unidecode import unidecode
 from autoslug import AutoSlugField
 from django.utils import timezone
@@ -158,7 +160,7 @@ class Post(models.Model):
         max_length=120
     )
 
-    text = RichTextField(null=True, blank=True,)
+    text = RichTextUploadingField(null=True, blank=True,)
 
     @property
     def clean_text(self):

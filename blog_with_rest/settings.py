@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'mdeditor',
     'ckeditor',
     'ckeditor_uploader',
+    'django.forms',
+
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -220,12 +222,13 @@ CKEDITOR_CONFIGS = {
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Undo', 'Redo'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Link', 'Unlink', 'Anchor', 'Image',  'Table', "HorizontalRule"],
-            ["Smiley", 'SpecialChar', 'RemoveFormat', 'Source'],
+            ["Smiley", 'SpecialChar', 'RemoveFormat', 'Source', 'CodeSnippet', 'Youtube'],
             ['Find', 'Replace', '-', 'SelectAll'],
 
         ],
         'uiColor': '#79AEC8',
-'extraPlugins': ','.join([
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
             'uploadimage', # the upload image feature
             # your extra plugins here
             'div',
@@ -246,3 +249,4 @@ CKEDITOR_CONFIGS = {
     },
 }
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_IMAGE_BACKEND = 'pillow'
