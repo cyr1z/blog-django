@@ -164,7 +164,7 @@ class Post(models.Model):
 
     @property
     def clean_text(self):
-        return BeautifulSoup(self.text).get_text()
+        return BeautifulSoup(self.text).get_text().strip()
 
     @property
     def short_text(self):
