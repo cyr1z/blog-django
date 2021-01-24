@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'mdeditor',
     'ckeditor',
+    'ckeditor_uploader',
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -167,12 +168,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# # https://docs.djangoproject.com/en/3.1/howto/static-files/
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 STATIC_URL = '/static/'
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/'
 
@@ -205,5 +206,43 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Qav53USgN2voc4QhcToPRZb1'
 
 SOCIAL_AUTH_CLEAN_USERNAMES = True
 
-DEFAULT_AVATAR = '/static/avatar.png'
+DEFAULT_AVATAR = '/avatar.png'
 AVATAR_TEMPLATE = '<img src="{}" alt="{}" class="img-fluid" style="border-radius: 50%;">'
+
+CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
+CKEDITOR_UPLOAD_PATH = 'upload/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Styles', 'Format', ],
+            ['TextColor', "BGColor", 'BackgroundColor', 'Superscript', 'Subscript'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Undo', 'Redo'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor', 'Image',  'Table', "HorizontalRule"],
+            ["Smiley", 'SpecialChar', 'RemoveFormat', 'Source'],
+            ['Find', 'Replace', '-', 'SelectAll'],
+
+        ],
+        'uiColor': '#79AEC8',
+'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+        # 'height': 400,
+        # 'width': 700,
+    },
+}
+CKEDITOR_ALLOW_NONIMAGE_FILES = False

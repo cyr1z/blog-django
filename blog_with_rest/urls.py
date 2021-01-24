@@ -37,5 +37,6 @@ urlpatterns = [
          name='django.contrib.sitemaps.views.sitemap'),
     path("feed/", BlogFeed(), name="feed"),
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

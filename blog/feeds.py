@@ -17,7 +17,7 @@ class BlogFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.text_rendered
+        return item.clean_text
 
     def item_link(self, item):
         return reverse('post_details', args=[item.slug])
