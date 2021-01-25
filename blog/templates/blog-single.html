@@ -1,115 +1,147 @@
 {% extends "sub_base.html" %}
 {% load blog_tags %}
+{% block add_css_js %}
+    <link href="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/a11y-light.css"
+          rel="stylesheet">
+    <script src="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
 {% block page_content %}
-        {% load static %}
+    {% load static %}
 
-          <div class="col-lg-8 single-content">
-            
-            <p class="mb-5">
-              <img src='/{{ object.preview }}' alt="{{ object.title }}" class="img-fluid">
-            </p>  
-            <h1 class="mb-4">
-              {{ object.title }}
-            </h1>
-            <div class="post-meta d-flex mb-5">
-              <div class="bio-pic mr-3">
+    <div class="col-lg-8 single-content">
+    {% if object.preview and object.preview  != default_image %}
+        <p class="mb-5">
+            <img src='/{{ object.preview }}' alt="{{ object.title }}" class="img-fluid">
+        </p>
+    {% endif %}
+        <h1 class="mb-4">
+            {{ object.title }}
+        </h1>
+        <div class="post-meta d-flex mb-5">
+            <div class="bio-pic mr-3">
                 {{ object.user.avatar|safe }}
-              </div>
-              <div class="vcard">
-                <span class="d-block"><a href="{% url 'author' object.user.slug %}">{{ object.user.full_name }}</a> in {{ object.category_links|safe }}</span>
-                <span class="date-read">{{ object.published_at }}<span class="mx-1">&bullet;</span> {{ object.minutes_to_read }} min read <span class="icon-star2"></span></span>
-              </div>
             </div>
-{{ object.text|safe }}
-            <div class="pt-5">
-                    <p>Categories:  {{ object.category_links|safe }}  Tags:  {{ object.tags_links|safe }} </p>
-                  </div>
-<div class="pt-5">
-<div><h4>Similar posts:</h4></div>
-<div class="row">
+            <div class="vcard">
+                <span class="d-block"><a
+                        href="{% url 'author' object.user.slug %}">{{ object.user.full_name }}</a> in {{ object.category_links|safe }}</span>
+                <span class="date-read">{{ object.published_at }}<span
+                        class="mx-1">&bullet;</span> {{ object.minutes_to_read }} min read <span
+                        class="icon-star2"></span></span>
+            </div>
+        </div>
+        {{ object.text|safe }}
+        <div class="pt-5">
 
 
-     {% for post in similar_posts %}
-         <div class="col-md-6 flex">
-                <div class="post-entry-2 d-flex bg-light">
-                  <div class="thumbnail" style="background-image: url('/{{ post.preview }}')"></div>
-                  <div class="contents">
-                    <h2><a href="{% url 'post_details' post.slug %}">{{ post.title}}</a></h2>
-                    <div class="post-meta">
-                      <span class="d-block"><a href="{% url 'author' post.user.slug %}">{{ post.user.full_name }}</a> in
-                        {{ post.category_links | safe }}</span>
-                      <span class="date-read">{{ post.published_at }}<span class="mx-1">&bullet;</span>{{ post.minutes_to_read }} min read <span class="icon-star2"></span></span>
-                    </div>
-                  </div>
-                </div></div>{% endfor %}
-</div></div>
 
-      
-      
-                  <div class="pt-5">
-                  {% if comments_count %}
+            <p>Categories: {{ object.category_links|safe }}
+               {% if object.tags_links %}Tags: {{ object.tags_links|safe }} {% endif %} </p>
+        </div>
+        <div class="pt-5">
+            <div><h4>Similar posts:</h4></div>
+            <div class="row">
+
+
+                {% for post in similar_posts %}
+                    <div class="col-md-6 flex">
+                        <div class="post-entry-2 d-flex bg-light">
+                            <div class="thumbnail"
+                                 style="background-image: url('/{{ post.preview }}')"></div>
+                            <div class="contents">
+                                <h2>
+                                    <a href="{% url 'post_details' post.slug %}">{{ post.title }}</a>
+                                </h2>
+                                <div class="post-meta">
+                      <span class="d-block"><a
+                              href="{% url 'author' post.user.slug %}">{{ post.user.full_name }}</a> in
+                          {{ post.category_links | safe }}</span>
+                                    <span class="date-read">{{ post.published_at }}<span
+                                            class="mx-1">&bullet;</span>{{ post.minutes_to_read }} min read <span
+                                            class="icon-star2"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>{% endfor %}
+            </div>
+        </div>
+
+
+        <div class="pt-5">
+            {% if comments_count %}
+
+
+                <div class="section-title">
+                    <h2 class="mb-5">{{ comments_count }}
+                        {% if comments_count == 1 %} Comment {% else %}
+                            Comments {% endif %}</h2>
+                </div>
+                <ul class="comment-list">
+                    {% for comment in object.post_comments.all %}
+                        <li class="comment">
+                        <div class="vcard bio">
+                            {{ comment.user.avatar|safe }}
+                        </div>
+                        <div class="comment-body">
+                            <h3>{{ comment.user.full_name }}</h3>
+                            <div class="meta">{{ comment.created_at }}</div>
+                            <p>{{ comment.text }}</p>
+                        </div>
+                    {% endfor %}
+                    </li>
+
+
+                </ul>
+            {% endif %}
+            <!-- END comment-list -->
+
+            <div class="comment-form-wrap pt-5">
+                {% if request.user.is_authenticated %}
 
 
                     <div class="section-title">
-                      <h2 class="mb-5">{{ comments_count }} {% if comments_count == 1 %} Comment {% else %} Comments {% endif %}</h2>
-                    </div>
-                    <ul class="comment-list">
-                         {% for comment in object.post_comments.all %}
-                      <li class="comment">
-                        <div class="vcard bio">
-                          {{ comment.user.avatar|safe }}
-                        </div>
-                        <div class="comment-body">
-                          <h3>{{ comment.user.full_name }}</h3>
-                          <div class="meta">{{ comment.created_at}}</div>
-                          <p>{{ comment.text }}</p>
-                        </div>
-                          {% endfor %}
-                      </li>
-      
-
-                    </ul>
-                  {% endif %}
-                    <!-- END comment-list -->
-                    
-                    <div class="comment-form-wrap pt-5">
-                    {% if request.user.is_authenticated %}
-
-
-                      <div class="section-title">
                         <h2>Leave a comment</h2>
-                      </div>
+                    </div>
 
-                      <form action="{% url 'comment' %}" method="post" class="p-5 bg-light">
-                      {% csrf_token %}
-                      <div class="comment"  ><span class="vcard bio" style="width: 50px; height: 50px; position: relative; display: inline-block; overflow: hidden; margin: 0;">
+                    <form action="{% url 'comment' %}" method="post"
+                          class="p-5 bg-light">
+                        {% csrf_token %}
+                        <div class="comment"><span class="vcard bio"
+                                                   style="width: 50px; height: 50px; position: relative; display: inline-block; overflow: hidden; margin: 0;">
                           {{ request.user.avatar|safe }}
                         </span>
 
-                            <span  style="font-size: 1.75rem; position: center; vertical-align: top;  display: inline-block;">{{ request.user.full_name }}</span></div>
-                      <input
-                            type="hidden" name="slug" value="{{ object.slug }}">
-                          {% for field in add_comment_form %}
-                              <div class="form-group">
-                          <label for="message">Message</label>
+                            <span style="font-size: 1.75rem; position: center; vertical-align: top;  display: inline-block;">{{ request.user.full_name }}</span>
+                        </div>
+                        <input
+                                type="hidden" name="slug"
+                                value="{{ object.slug }}">
+                        {% for field in add_comment_form %}
+                            <div class="form-group">
+                                <label for="message">Message</label>
                                 {{ field }}
-                              </div>
-                            {% endfor %}
+                            </div>
+                        {% endfor %}
 
                         <div class="form-group">
-                          <input type="submit" value="Post Comment" class="btn btn-primary py-3">
+                            <input type="submit" value="Post Comment"
+                                   class="btn btn-primary py-3">
                         </div>
-      
-                      </form>
-                        {% else %}
-                        <label>Login for leave comment</label>
-                                          <div class="col-md-12"> <a class="btn  btn-light border border-primary" href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> </div>
 
-                    {% endif %}
-                    </div>
-                  </div>
-          </div>
+                    </form>
+                {% else %}
+                    <label>Login for leave comment</label>
+                    <div class="col-md-12"><a
+                            class="btn  btn-light border border-primary"
+                            href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}"><img
+                            src="https://img.icons8.com/color/16/000000/google-logo.png">
+                        Signup Using Google</a></div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 
 
-  {% endblock %}
+{% endblock %}

@@ -8,7 +8,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
 
-from blog_with_rest.settings import READ_SPEED, AVATAR_TEMPLATE, DEFAULT_AVATAR
+from blog_with_rest.settings import READ_SPEED, AVATAR_TEMPLATE, \
+    DEFAULT_AVATAR, DEFAULT_POST_IMAGE
 from django.core.exceptions import ValidationError
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_STANDARD
@@ -176,7 +177,7 @@ class Post(models.Model):
     preview = models.ImageField(
         verbose_name='Image',
         upload_to='posts_images/',
-        default='static/post.png',
+        default=DEFAULT_POST_IMAGE,
         null=True,
         blank=True
     )
