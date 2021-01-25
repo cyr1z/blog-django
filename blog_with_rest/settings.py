@@ -215,14 +215,15 @@ CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = 'upload/'
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'Custom',
+        'toolbar': 'full',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline', 'Strike', 'Styles', 'Format', ],
             ['TextColor', "BGColor", 'BackgroundColor', 'Superscript', 'Subscript'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Undo', 'Redo'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Link', 'Unlink', 'Anchor', 'Image',  'Table', "HorizontalRule"],
-            ["Smiley", 'SpecialChar', 'RemoveFormat', 'Source', 'CodeSnippet', 'Youtube'],
+            ["Smiley", 'SpecialChar', 'RemoveFormat', 'Source',
+             'CodeSnippet', 'Youtube',  'Blockquote'],
             ['Find', 'Replace', '-', 'SelectAll'],
 
         ],
@@ -233,6 +234,7 @@ CKEDITOR_CONFIGS = {
             'codesnippet,'
             'uploadimage', # the upload image feature
             # your extra plugins here
+            'html5audio',
             'div',
             'autolink',
             'autoembed',
