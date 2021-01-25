@@ -229,6 +229,8 @@ CKEDITOR_CONFIGS = {
         'uiColor': '#79AEC8',
         'tabSpaces': 4,
         'extraPlugins': ','.join([
+            'youtube',
+            'codesnippet,'
             'uploadimage', # the upload image feature
             # your extra plugins here
             'div',
