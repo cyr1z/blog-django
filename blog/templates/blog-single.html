@@ -3,8 +3,9 @@
 {% block add_css_js %}
     <link href="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/a11y-light.css"
           rel="stylesheet">
-            <link rel="stylesheet" href="/static/css/grid-gallery/baguetteBox.min.css" />
-        <link rel="stylesheet" href="/static/css/grid-gallery/grid-gallery.css">
+    <link rel="stylesheet"
+          href="/static/css/grid-gallery/baguetteBox.min.css"/>
+    <link rel="stylesheet" href="/static/css/grid-gallery/grid-gallery.css">
     <script src="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
@@ -14,11 +15,12 @@
     {% load static %}
 
     <div class="col-lg-8 single-content">
-    {% if object.preview and object.preview  != default_image %}
-        <p class="mb-5">
-            <img src='/{{ object.preview }}' alt="{{ object.title }}" class="img-fluid">
-        </p>
-    {% endif %}
+        {% if object.preview and object.preview  != default_image %}
+            <p class="mb-5">
+                <img src='/{{ object.preview }}' alt="{{ object.title }}"
+                     class="img-fluid">
+            </p>
+        {% endif %}
         <h1 class="mb-4">
             {{ object.title }}
         </h1>
@@ -34,33 +36,35 @@
                         class="icon-star2"></span></span>
             </div>
         </div>
-    <div class="row">
-        {% if images %}
-
-            {% for image in images %}
-
+        <div class="row gallery-block grid-gallery">
+            {% if images %}
+                {% for image in images %}
 
 
-        <div class="col-md-6 col-lg-4 item">
-            <a class="lightbox" href="/{{image.image}}">
-                <img class="img-fluid image scale-on-hover" src="/{{image.image}}" alt="{{image.alt}}">
-            </a>
+
+                    <div class="col-md-6 col-lg-4 item flex">
+                        <a class="lightbox" href="/{{ image.image }}">
+                            <img class="img-fluid image scale-on-hover"
+                                 src="/{{ image.image }}"
+                                 alt="{{ image.alt }}">
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
-            {% endfor %}
-        {% endif %}
-    </div>
-        {{ object.text|safe }}
-        <div class="pt-5">
+        <div class="main">
+            {{ object.text|safe }}
+            <div class="pt-5">
+                <p>Categories: {{ object.category_links|safe }}
+                    {% if object.tags_links %}Tags:
+                        {{ object.tags_links|safe }} {% endif %}
+                </p>
+            </div>
 
-
-
-            <p>Categories: {{ object.category_links|safe }}
-               {% if object.tags_links %}Tags: {{ object.tags_links|safe }} {% endif %} </p>
         </div>
-        <div class="pt-5">
-            <div><h4>Similar posts:</h4></div>
-            <div class="row">
-
+        <div class="row">
+            <div class="pt-5">
+                <div><h4>Similar posts:</h4></div>
 
                 {% for post in similar_posts %}
                     <div class="col-md-6 flex">
@@ -150,10 +154,10 @@
                     </form>
                 {% else %}
                     <label>Login for leave comment</label>
-                    <div class="col-md-12"><a
-                            class="btn  btn-light border border-primary"
-                            href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}"><img
-                            src="https://img.icons8.com/color/16/000000/google-logo.png">
+                    <div class="col-md-12">
+                        <a class="btn  btn-light border border-primary"
+                            href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}">
+                        <img src="/static/google-logo.png">
                         Signup Using Google</a></div>
 
                 {% endif %}

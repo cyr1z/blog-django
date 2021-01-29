@@ -50,17 +50,14 @@ class AlbumModelAdmin(admin.ModelAdmin):
                     img = AlbumImage()
                     img.album = album
                     img.alt = filename
-                    filename = '{0}{1}.jpg'.format(
-                        album.slug,
-                        str(uuid.uuid4())[-13:]
-                    )
+                    filename = f'{album.slug}{str(uuid.uuid4())[-13:]}.jpg'
                     img.image.save(filename, content_file)
 
-                    filepath = '{0}/albums/{1}'.format(MEDIA_ROOT, filename)
+                    filepath = f'{MEDIA_ROOT}/albums/{filename}'
                     with Image.open(filepath) as i:
                         img.width, img.height = i.size
 
-                    img.thumb.save('thumb-{0}'.format(filename), content_file)
+                    img.thumb.save(f'thumb-{filename}', content_file)
                     img.save()
                 zip_file.close()
             super(AlbumModelAdmin, self).save_model(request, obj, form, change)

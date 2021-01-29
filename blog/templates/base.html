@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load blog_tags %}
-    {% load static %}
+{% load blog_tags %}
+{% load static %}
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
@@ -34,7 +34,6 @@
 
     {% block add_css_js %}
     {% endblock %}
-
 
 
 </head>
@@ -74,14 +73,19 @@
                                 class="icon-twitter"></span></a>
                         <a href="#" class="d-inline-block p-3"><span
                                 class="icon-instagram"></span></a>
-                        <a href="{% url 'feed' %}" class="d-inline-block p-3"><span
+                        <a href="{% url 'feed' %}"
+                           class="d-inline-block p-3"><span
                                 class="icon-rss"></span></a>
                     </div>
-                    <form action="{% url 'posts_list' %}" class="search-form d-inline-block">
+                    <form action="{% url 'posts_list' %}"
+                          class="search-form d-inline-block">
 
                         <div class="d-flex">
                             <input type="text" class="form-control"
-                                   {% if request.GET.q %} value="{{ request.GET.q }}" {% else %} placeholder="Search..." {% endif %} name="q">
+                                    {% if request.GET.q %}
+                                   value="{{ request.GET.q }}" {% else %}
+                                   placeholder="Search..." {% endif %}
+                                   name="q">
                             <button type="submit" class="btn btn-secondary">
                                 <span class="icon-search"></span></button>
                         </div>
@@ -188,9 +192,9 @@
 <script src="/static/js/jquery.sticky.js"></script>
 <script src="/static/js/jquery.mb.YTPlayer.min.js"></script>
 <script src="/static/js/baguetteBox.min.js"></script>
-            <script>
-            baguetteBox.run('.grid-gallery', { animation: 'slideIn'});
-        </script>
+<script>
+    baguetteBox.run('.grid-gallery', {animation: 'slideIn'});
+</script>
 
 <script src="/static/js/main.js"></script>
 
