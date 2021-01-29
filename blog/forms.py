@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from blog.models import BlogUser, Comment, Post
+from blog.models import BlogUser, Comment, Post, Album
 
 
 class SignUpForm(UserCreationForm):
@@ -37,17 +37,10 @@ class CreateCommentForm(ModelForm):
 class SearchBoxForm(forms.Form):
     q = forms.CharField()
 
-#
-# class CreatePostForm(ModelForm):
-#     class Meta:
-#         model = Post
-#         fields = [
-#             'user',
-#             'tags',
-#             'title',
-#             'text',
-#             'categories',
-#             'preview',
-#             'pinned_on_main_top',
-#             'pinned_on_main_bottom',
-#         ]
+
+class AlbumForm(forms.ModelForm):
+    class Meta:
+        model = Album
+        exclude = []
+
+    zip = forms.FileField(required=False)

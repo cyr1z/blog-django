@@ -229,6 +229,7 @@ CKEDITOR_CONFIGS = {
         ],
         'uiColor': '#79AEC8',
         'tabSpaces': 4,
+        'filebrowserHtml5audioUploadUrl': CKEDITOR_UPLOAD_PATH,
         'extraPlugins': ','.join([
             'youtube',
             'codesnippet,'
@@ -246,13 +247,14 @@ CKEDITOR_CONFIGS = {
             'clipboard',
             'dialog',
             'dialogui',
-            'elementspath'
+            'elementspath',
+            'leaflet',
         ]),
         # 'height': 400,
         # 'width': 700,
     },
 }
-CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_ALLOW_NONIMAGE_FILES = True
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 DEFAULT_POST_IMAGE = 'static/post.png'

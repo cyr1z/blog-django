@@ -1,4 +1,5 @@
 import math
+import uuid
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from unidecode import unidecode
@@ -10,12 +11,10 @@ from django.utils.safestring import mark_safe
 
 from blog_with_rest.settings import READ_SPEED, AVATAR_TEMPLATE, \
     DEFAULT_AVATAR, DEFAULT_POST_IMAGE
-from django.core.exceptions import ValidationError
-from markdownfield.models import MarkdownField, RenderedMarkdownField
-from markdownfield.validators import VALIDATOR_STANDARD
 from django.urls import reverse
-from ckeditor.fields import RichTextField
 from bs4 import BeautifulSoup
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 
 class BlogUser(AbstractUser):
@@ -154,14 +153,13 @@ class Post(models.Model):
     tags = models.ManyToManyField(
         Tag,
         related_name='tag_posts',
-        null=True,
         blank=True,
     )
     title = models.CharField(
         max_length=120
     )
 
-    text = RichTextUploadingField(null=True, blank=True,)
+    text = RichTextUploadingField(null=True, blank=True, )
 
     @property
     def clean_text(self):
@@ -253,49 +251,6 @@ class Post(models.Model):
                f'{", ".join([x.title for x in self.categories.all()])}'
 
 
-class Content(models.Model):
-    """
-    Additional pictures, audio or video content
-    """
-
-    class ContentTypes(models.TextChoices):
-        VIDEO = 'video'
-        AUDIO = 'audio',
-        IMAGE = 'image'
-        # LINK = 'link',
-        # MAP = 'map',
-
-    post = models.ForeignKey(
-        Post,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name='post_contents'
-    )
-    type = models.CharField(
-        max_length=5,
-        choices=ContentTypes.choices,
-        default=ContentTypes.IMAGE,
-    )
-    image = models.ImageField(
-        verbose_name='Image',
-        upload_to='contents_files/',
-        null=True,
-        blank=True
-    )
-    file = models.FileField(
-        upload_to='contents_files/',
-    )
-    link = models.URLField(
-        max_length=800
-    )
-
-    def save(self, *args, **kwargs):
-        if self.image and self.file or self.file and self.link \
-                or self.link and self.image:
-            raise ValidationError('Not one content element')
-        super().save(*args, **kwargs)
-
-
 class Comment(models.Model):
     """
     Comment
@@ -343,3 +298,52 @@ class Comment(models.Model):
     def deactivate(self):
         self.active = False
         self.save()
+
+
+class Album(models.Model):
+    title = models.CharField(max_length=70)
+    thumb = ProcessedImageField(
+        upload_to='albums',
+        processors=[ResizeToFit(300)],
+        format='JPEG',
+        options={'quality': 90}
+    )
+    post = models.OneToOneField(
+        Post,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name='album'
+
+    )
+    is_visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def unicode_title(self):
+        return unidecode(self.title)
+
+    slug = AutoSlugField(populate_from='unicode_title')
+
+    def __str__(self):
+        return self.title
+
+
+class AlbumImage(models.Model):
+    image = ProcessedImageField(
+        upload_to='albums',
+        processors=[ResizeToFit(1280)],
+        format='JPEG',
+        options={'quality': 70}
+    )
+    thumb = ProcessedImageField(
+        upload_to='albums',
+        processors=[ResizeToFit(300)],
+        format='JPEG',
+        options={'quality': 80}
+    )
+    album = models.ForeignKey(Album, on_delete=models.PROTECT)
+    alt = models.CharField(max_length=255, default=uuid.uuid4)
+    width = models.IntegerField(default=0)
+    height = models.IntegerField(default=0)
+    slug = models.SlugField(max_length=70, default=uuid.uuid4, editable=False)

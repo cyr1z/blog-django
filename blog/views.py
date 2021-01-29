@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from blog.forms import SignUpForm, CreateCommentForm
-from blog.models import Post, Category, Tag, BlogUser, Comment
+from blog.models import Post, Category, Tag, BlogUser, Comment, AlbumImage
 from blog_with_rest.settings import DEFAULT_POST_IMAGE
 
 
@@ -92,6 +92,10 @@ class PostDetailView(DetailView):
         ).order_by('-same_tags', '-published_at')[:2]
         context.update({'similar_posts': similar_posts})
         context.update({'default_image': DEFAULT_POST_IMAGE})
+        # add gallery images
+        if self.object.album:
+            images = AlbumImage.objects.filter(album=self.object.album)
+            context.update({'images': images})
         return context
 
 
