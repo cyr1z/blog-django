@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.contrib import messages
 from django.views.generic import CreateView, ListView, TemplateView, \
     DetailView, FormView
 
@@ -194,7 +195,7 @@ class Contact(FormView):
         #     send_mail(subject, message, from_email, to_mail)
         # except BadHeaderError:
         #     pass
-
+        messages.success(self.request, 'Your message send.')
         return HttpResponseRedirect(reverse('contact'))
 
 

@@ -47,8 +47,44 @@ class AlbumForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-    email = forms.EmailField(required=True)
-    phone = forms.CharField(required=False)
-    name = forms.CharField(required=False)
-    subject = forms.CharField(required=False)
-    message = forms.CharField(widget=forms.Textarea, required=True)
+    email = forms.EmailField(
+        required=True,
+        max_length=254,
+        widget=forms.EmailInput(
+            attrs={'class': 'form-control form-control-lg'}
+        )
+    )
+    phone = forms.CharField(
+        required=False,
+        max_length=254,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control form-control-lg'}
+        )
+    )
+    name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control form-control-lg',
+                'placeholder': 'Write your name here'
+            }
+        )
+    )
+    subject = forms.CharField(
+        required=False,
+        max_length=254,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control form-control-lg'}
+        )
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'rows': '10',
+                'cols': '30',
+
+            }
+        ),
+        required=True
+    )
