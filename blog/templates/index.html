@@ -10,7 +10,9 @@
 
 
             <div class="half-post-entry d-block d-lg-flex bg-light">
-              <div class="img-bg" style="background-image: url('{{ pinned_on_main_top_post.preview }}')"></div>
+{#            <a href="{% url 'post_details'  pinned_on_main_top_post.slug %}">#}
+                <div class="img-bg" style="background-image: url('{{ pinned_on_main_top_post.preview }}')"></div>
+{#                </a>#}
               <div class="contents">
                 <span class="caption">Editor's Pick</span>
                 <h2><a href="{% url 'post_details'  pinned_on_main_top_post.slug %}">{{ pinned_on_main_top_post.title }}</a></h2>
@@ -25,7 +27,7 @@
             </div>
               {% endif %}
 
-        </div>
+          </div></div>
 
     <div class="site-section">
 
@@ -66,7 +68,9 @@
 
 
                 <div class="post-entry-2 d-flex bg-light">
-                  <div class="thumbnail" style="background-image: url('{{ post.preview }}')"></div>
+{#                <a href="{% url 'post_details' post.slug %}">#}
+                    <div class="thumbnail" style="background-image: url('{{ post.preview }}')"></div>
+{#                </a>#}
                   <div class="contents">
                     <h2><a href="{% url 'post_details' post.slug %}">{{ post.title}}</a></h2>
                     <div class="post-meta">
@@ -89,8 +93,11 @@
     <div class="py-0">
       <div class="container">
         <div class="half-post-entry d-block d-lg-flex bg-light">
-          <div class="img-bg" style="background-image: url('{{ pinned_on_main_bottom_post.preview }}')"></div>
             {% if pinned_on_main_bottom_post %}
+{#        <a href="{% url 'post_details' pinned_on_main_bottom_post.slug %}">#}
+            <div class="img-bg" style="background-image: url('{{ pinned_on_main_bottom_post.preview }}')"></div>
+{#                </a>#}
+
 
 
           <div class="contents">

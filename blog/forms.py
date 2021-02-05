@@ -44,3 +44,11 @@ class AlbumForm(forms.ModelForm):
         exclude = []
 
     zip = forms.FileField(required=False)
+
+
+class ContactForm(forms.Form):
+    email = forms.EmailField(required=True)
+    phone = forms.CharField(required=False)
+    name = forms.CharField(required=False)
+    subject = forms.CharField(required=False)
+    message = forms.CharField(widget=forms.Textarea, required=True)

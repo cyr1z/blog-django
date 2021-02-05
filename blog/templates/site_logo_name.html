@@ -1,0 +1,7 @@
+<a href="{% url "index" %}" class="site-logo">
+    {% if name %}
+        {{ name }}
+    {% else %}
+        My demo blog
+    {% endif %}
+</a>

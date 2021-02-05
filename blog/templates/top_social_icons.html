@@ -1,0 +1,31 @@
+<div class="ml-md-auto top-social d-none d-lg-inline-block">
+    {% if fb_link %}
+        <a href="{{ fb_link }}" class="d-inline-block p-3"><span
+                class="icon-facebook"></span></a>
+    {% endif %}
+    {% if twitter_link %}
+        <a href="{{ twitter_link }}" class="d-inline-block p-3"><span
+                class="icon-twitter"></span></a>
+    {% endif %}
+    {% if instagram_link %}
+    <a href="{{ instagram_link }}" class="d-inline-block p-3">
+        <span class="icon-instagram"></span></a>
+    {% endif %}
+    {% if tg_link %}
+    <a href="{{ tg_link }}" class="d-inline-block p-3"><span
+            class="icon-telegram"></span></a>
+    {% endif %}
+    {% if youtube_link %}
+    <a href="{{ youtube_link }}" class="d-inline-block p-3"><span
+            class="icon-youtube"></span></a>
+    {% endif %}
+    {% if github_link %}
+    <a href="{{ github_link }}" class="d-inline-block p-3"><span
+            class="icon-github"></span></a>
+    {% endif %}
+
+
+    <a href="{% url 'feed' %}"
+       class="d-inline-block p-3"><span
+            class="icon-rss"></span></a>
+</div>

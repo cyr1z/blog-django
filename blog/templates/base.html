@@ -8,7 +8,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
     <link href="https://fonts.googleapis.com/css?family=B612+Mono|Cabin:400,700&display=swap"
           rel="stylesheet">
 
@@ -56,9 +58,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6 d-flex">
-                    <a href="/" class="site-logo">
-                        My demo blog
-                    </a>
+                    {% show_logo_name %}
 
                     <a href="#"
                        class="ml-auto d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black"><span
@@ -66,17 +66,7 @@
 
                 </div>
                 <div class="col-12 col-lg-6 ml-auto d-flex">
-                    <div class="ml-md-auto top-social d-none d-lg-inline-block">
-                        <a href="#" class="d-inline-block p-3"><span
-                                class="icon-facebook"></span></a>
-                        <a href="#" class="d-inline-block p-3"><span
-                                class="icon-twitter"></span></a>
-                        <a href="#" class="d-inline-block p-3"><span
-                                class="icon-instagram"></span></a>
-                        <a href="{% url 'feed' %}"
-                           class="d-inline-block p-3"><span
-                                class="icon-rss"></span></a>
-                    </div>
+                {% show_top_social %}
                     <form action="{% url 'posts_list' %}"
                           class="search-form d-inline-block">
 
@@ -121,24 +111,24 @@
     {% block content %}
     {% endblock %}
     <div class="site-section subscribe bg-light">
-        <div class="container">
-            <form action="#" class="row align-items-center">
-                <div class="col-md-5 mr-auto">
-                    <h2>Newsletter Subcribe</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Perferendis aspernatur ut at quae omnis pariatur
-                        obcaecati possimus nisi ea iste!</p>
-                </div>
-                <div class="col-md-6 ml-auto">
-                    <div class="d-flex">
-                        <input type="email" class="form-control"
-                               placeholder="Enter your email">
-                        <button type="submit" class="btn btn-secondary"><span
-                                class="icon-paper-plane"></span></button>
-                    </div>
-                </div>
-            </form>
-        </div>
+{#        <div class="container">#}
+{#            <form action="#" class="row align-items-center">#}
+{#                <div class="col-md-5 mr-auto">#}
+{#                    <h2>Newsletter Subcribe</h2>#}
+{#                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing#}
+{#                        elit. Perferendis aspernatur ut at quae omnis pariatur#}
+{#                        obcaecati possimus nisi ea iste!</p>#}
+{#                </div>#}
+{#                <div class="col-md-6 ml-auto">#}
+{#                    <div class="d-flex">#}
+{#                        <input type="email" class="form-control"#}
+{#                               placeholder="Enter your email">#}
+{#                        <button type="submit" class="btn btn-secondary"><span#}
+{#                                class="icon-paper-plane"></span></button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
+{#        </div>#}
     </div>
     <div class="footer">
         <div class="container">
@@ -150,7 +140,7 @@
                         <p>
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                            All rights reserved | This template is made with <i
+                            All rights reserved | <a href="{% url 'login' %}"> Login </a>  | This template is made with <i
                                 class="icon-heart text-danger"
                                 aria-hidden="true"></i> by <a
                                 href="https://colorlib.com" target="_blank">Colorlib</a>
@@ -191,10 +181,9 @@
 <script src="/static/js/jquery.fancybox.min.js"></script>
 <script src="/static/js/jquery.sticky.js"></script>
 <script src="/static/js/jquery.mb.YTPlayer.min.js"></script>
-<script src="/static/js/baguetteBox.min.js"></script>
-<script>
-    baguetteBox.run('.grid-gallery', {animation: 'slideIn'});
-</script>
+{% block script_bottom %}
+{% endblock %}
+
 
 <script src="/static/js/main.js"></script>
 

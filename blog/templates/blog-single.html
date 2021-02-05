@@ -168,3 +168,9 @@
 
 
 {% endblock %}
+{% block script_bottom %}
+    <script src="/static/js/baguetteBox.min.js"></script>
+<script>
+    baguetteBox.run('.grid-gallery', {animation: 'slideIn'});
+</script>
+{% endblock %}

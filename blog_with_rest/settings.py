@@ -11,20 +11,21 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z_8ha-nkqej5kl%977vas9mod475wkfzjdn08ai9&laoud+)8_'
-
+# SECRET_KEY = 'z_8ha-nkqej5kl%977vas9mod475wkfzjdn08ai9&laoud+)8_'
+SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# DEBUG = True
+DEBUG = os.getenv("DEBUG")
 ALLOWED_HOSTS = []
 
 
@@ -193,19 +194,11 @@ LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-TORDERINGS = ['created_at', '-created_at']
-DEFAULT_TESTS_ORDERING = 'created_at'
 
+GOOGLE_LOGIN_URL = os.getenv("GOOGLE_LOGIN_URL")
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
 
-
-MINIMUM_QUESTIONS = 5
-
-
-
-GOOGLE_LOGIN_URL = '/auth/login/google-oauth2/'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '310334247862-7h00um3ib92hh7ap6q6gavvhqi2mnrgm.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Qav53USgN2voc4QhcToPRZb1'
-
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 SOCIAL_AUTH_CLEAN_USERNAMES = True
 
 DEFAULT_AVATAR = '/avatar.png'
@@ -258,3 +251,10 @@ CKEDITOR_ALLOW_NONIMAGE_FILES = True
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 DEFAULT_POST_IMAGE = 'static/post.png'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")

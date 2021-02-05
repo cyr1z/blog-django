@@ -1,6 +1,5 @@
 import os
 import uuid
-from django.utils import timezone
 from zipfile import ZipFile
 from django.contrib import admin
 from django.core.files.base import ContentFile
@@ -8,14 +7,15 @@ from django.utils.safestring import mark_safe
 from PIL import Image
 from blog_with_rest.settings import MEDIA_ROOT
 from .forms import AlbumForm
-from .models import Category, BlogUser, Tag, Post, Comment, Album, AlbumImage
+from .models import Category, BlogUser, Tag, Post, Comment, Album, AlbumImage, \
+    SiteSettings
 
-
-class ProductAdmin(admin.ModelAdmin):
-    readonly_fields = ["preview"]
-
-    def preview(self, obj):
-        return mark_safe(f'<img src="{obj.image.url}" height="200">')
+#
+# class ProductAdmin(admin.ModelAdmin):
+#     readonly_fields = ["preview"]
+#
+#     def preview(self, obj):
+#         return mark_safe(f'<img src="{obj.image.url}" height="200">')
 
 
 admin.site.register(Category)
@@ -68,3 +68,20 @@ class AlbumImageModelAdmin(admin.ModelAdmin):
     list_display = ('alt', 'album')
     list_filter = ('album',)
 
+
+class SingletonModelAdmin(admin.ModelAdmin):
+    """
+    Prevents Django admin users deleting the singleton or adding extra rows.
+    """
+    actions = None  # Removes the default delete action.
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(SingletonModelAdmin):
+    pass

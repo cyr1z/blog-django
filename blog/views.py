@@ -3,15 +3,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.postgres.search import SearchVector, SearchQuery, \
     SearchRank
+from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, TemplateView, DetailView
+from django.views import View
+from django.views.generic import CreateView, ListView, TemplateView, \
+    DetailView, FormView
 
-from blog.forms import SignUpForm, CreateCommentForm
-from blog.models import Post, Category, Tag, BlogUser, Comment, AlbumImage
-from blog_with_rest.settings import DEFAULT_POST_IMAGE
+from blog.forms import SignUpForm, CreateCommentForm, ContactForm
+from blog.models import Post, Category, Tag, BlogUser, Comment, AlbumImage, \
+    SiteSettings
+from blog_with_rest.settings import DEFAULT_POST_IMAGE, EMAIL_HOST_USER, \
+    EMAIL_HOST_PASSWORD
 
 
 class UserLogin(LoginView, ):
@@ -118,6 +124,9 @@ class CategoryDetailView(DetailView):
 
 
 class TagDetailView(DetailView):
+    """
+    Tag
+    """
     model = Tag
     template_name = 'categories.html'
 
@@ -134,7 +143,7 @@ class TagDetailView(DetailView):
 
 class MainPage(TemplateView):
     """
-    main page
+    main page / index page
     """
     template_name = 'index.html'
 
@@ -166,18 +175,27 @@ class MainPage(TemplateView):
         return context
 
 
-class Contact(TemplateView):
+class Contact(FormView):
     """
-     main page
-     """
+    contact page
+    """
     template_name = 'contact.html'
+    form_class = ContactForm
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        categories = {_.title: _.slug for _ in Category.objects.all()}
-        context.update({'categories': categories})
+    def form_valid(self, form):
+        subject = form.cleaned_data['subject']
+        from_email = form.cleaned_data['email']
+        message = form.cleaned_data['message']
+        phone = form.cleaned_data['phone']
+        name = form.cleaned_data['name']
+        to_mail = [SiteSettings.objects.first().contact_email, ]
 
-        return context
+        # try:
+        #     send_mail(subject, message, from_email, to_mail)
+        # except BadHeaderError:
+        #     pass
+
+        return HttpResponseRedirect(reverse('contact'))
 
 
 @method_decorator(login_required, name='dispatch')

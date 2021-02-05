@@ -17,6 +17,45 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
 
 
+class SingletonModel(models.Model):
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super(SingletonModel, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class SiteSettings(SingletonModel):
+    site_name = models.CharField(max_length=40, default='My blog')
+    support = models.EmailField(default='support@example.com')
+    contact_email = models.EmailField(default='support@example.com')
+    contact_tg = models.CharField(max_length=255, null=True, blank=True)
+    contact_tg_id = models.CharField(max_length=255, null=True, blank=True)
+    support_tg = models.CharField(max_length=255, null=True, blank=True)
+    support_tg_id = models.CharField(max_length=255, null=True, blank=True)
+
+    contact_about_text = RichTextUploadingField(null=True, blank=True)
+    fb_link = models.CharField(max_length=255, null=True, blank=True)
+    tg_link = models.CharField(max_length=255, null=True, blank=True)
+    youtube_link = models.CharField(max_length=255, null=True, blank=True)
+    twitter_link = models.CharField(max_length=255, null=True, blank=True)
+    instagram_link = models.CharField(max_length=255, null=True, blank=True)
+    github_link = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'
+
+
 class BlogUser(AbstractUser):
     """
     Customised Django User Model

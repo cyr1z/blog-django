@@ -2,7 +2,7 @@
                              role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                                 <li class="active">
-                                    <a href="/"
+                                    <a href="{% url 'index' %}"
                                        class="nav-link text-left">Home</a>
                                 </li>
                                 {% for category in categories %}
@@ -11,7 +11,7 @@
                                            class="nav-link text-left">{{ category.title }}</a>
                                     </li>
                                 {% endfor %}
-                                <li><a href="/contact"
+                                <li><a href="{% url 'contact' %}"
                                        class="nav-link text-left">Contact</a>
                                 </li>
                             </ul>

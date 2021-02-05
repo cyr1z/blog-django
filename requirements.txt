@@ -11,10 +11,12 @@ cryptography==3.3.1
 decorator==4.4.2
 defusedxml==0.7.0rc2
 Django==3.1.5
+django-appconf==1.0.4
 django-autoslug==1.9.8
 django-ckeditor==6.0.0
 django-crispy-forms==1.10.0
 django-filter==2.4.0
+django-imagekit==4.0.2
 django-js-asset==1.2.2
 django-markdownfield==0.8.0
 django-mdeditor==0.1.18
@@ -33,6 +35,7 @@ parso==0.7.1
 pexpect==4.8.0
 phonenumbers==8.12.16
 pickleshare==0.7.5
+pilkit==2.0
 Pillow==8.0.1
 pkg-resources==0.0.0
 prompt-toolkit==3.0.8
@@ -42,6 +45,7 @@ pycparser==2.20
 Pygments==2.7.2
 PyJWT==2.0.0
 pyparsing==2.4.7
+python-dotenv==0.15.0
 python3-openid==3.2.0
 pytz==2020.4
 regex==2020.11.13
