@@ -100,10 +100,10 @@ class PostDetailView(DetailView):
         context.update({'similar_posts': similar_posts})
         context.update({'default_image': DEFAULT_POST_IMAGE})
         # add gallery images
-        if self.object.album:
+        try:
             images = AlbumImage.objects.filter(album=self.object.album)
             context.update({'images': images})
-        else:
+        except:
             context.update({'images': None})
         return context
 
