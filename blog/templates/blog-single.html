@@ -72,7 +72,7 @@
                     <div class="col-md-6 flex">
                         <div class="post-entry-2 d-flex bg-light">
                             <div class="thumbnail"
-                                 style="background-image: url('/{{ post.preview }}'); height: 50px; width: 50px"></div>
+                                 style="background-image: url('/{{ post.preview }}'); min-height: 150px; min-width: 150px"></div>
                             <div class="contents">
                                 <h2>
                                     <a href="{% url 'post_details' post.slug %}">{{ post.title }}</a>
