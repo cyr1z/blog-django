@@ -103,6 +103,8 @@ class PostDetailView(DetailView):
         if self.object.album:
             images = AlbumImage.objects.filter(album=self.object.album)
             context.update({'images': images})
+        else:
+            context.update({'images': None})
         return context
 
 

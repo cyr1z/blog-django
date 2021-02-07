@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 DEBUG = os.getenv("DEBUG")
-ALLOWED_HOSTS = ['34.121.135.54', '127.0.0.1']
+ALLOWED_HOSTS = ['blog.zolotarev.pp.ua', '34.121.135.54', '127.0.0.1']
 
 
 # Application definition
