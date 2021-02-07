@@ -38,8 +38,9 @@
                         class="icon-star2"></span></span>
             </div>
         </div>
-        <div class="row gallery-block grid-gallery">
+
             {% if images %}
+                <div class="row gallery-block grid-gallery">
                 {% for image in images %}
 
 
@@ -52,8 +53,9 @@
                         </a>
                     </div>
                 {% endfor %}
+                        </div>
             {% endif %}
-        </div>
+
         <div class="main">
             {{ object.text|safe }}
             <div class="pt-5">
