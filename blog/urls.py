@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from blog.API.resources import PostViewSet
+from blog.API.resources import PostViewSet, UserViewSet
 from blog.models import Post
 from blog.views import UserLogin, UserLogout, Register, MainPage, \
     PostDetailView, PostListView, CategoryDetailView, TagDetailView, \
@@ -10,6 +10,7 @@ from blog.views import UserLogin, UserLogout, Register, MainPage, \
 
 router = DefaultRouter()
 router.register(r'post_api', PostViewSet)
+router.register(r'user_api', UserViewSet)
 
 
 urlpatterns = [
