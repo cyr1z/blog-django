@@ -4,7 +4,7 @@ from rest_framework.permissions import SAFE_METHODS, IsAdminUser
 
 from blog.API.permissions import ReadOnly, Register
 from blog.API.serialisers import PostSerializer, UserSerializer, \
-    RegisterSerializer, CreatePostSerializer
+    RegisterSerializer
 from blog.models import Post, BlogUser
 
 
