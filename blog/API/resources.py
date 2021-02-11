@@ -1,28 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import BasePermission, SAFE_METHODS, \
-    IsAuthenticated, IsAdminUser
+from rest_framework.permissions import SAFE_METHODS, IsAdminUser
 
+from blog.API.permissions import ReadOnly, Register
 from blog.API.serialisers import PostSerializer, UserSerializer, \
-    RegisterSerializer
+    RegisterSerializer, CreatePostSerializer
 from blog.models import Post, BlogUser
-
-
-class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in SAFE_METHODS
-
-
-class AuthorizedCreate(BasePermission):
-    def has_permission(self, request, view):
-        if request.user.is_authenticated:
-            return request.method == 'POST'
-
-
-class Register(BasePermission):
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            return request.method == 'POST'
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -30,6 +13,17 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     authentication_classes = [BasicAuthentication, ]
     permission_classes = [ReadOnly]
+
+    # permission_classes = [IsAdminUser | ReadOnly]
+    #
+    # def get_serializer_class(self):
+    #     if hasattr(self.request, 'method'):
+    #         if self.request.method in SAFE_METHODS:
+    #             return PostSerializer
+    #         elif self.request.method == 'POST':
+    #             return CreatePostSerializer
+    #         else:
+    #             return PostSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -39,7 +33,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser | Register]
 
     def get_serializer_class(self):
-        print(self.request.method)
         if hasattr(self.request, 'method'):
             if self.request.method in SAFE_METHODS:
                 return UserSerializer
