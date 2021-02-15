@@ -78,7 +78,7 @@ class AdminModelPost(admin.ModelAdmin):
     readonly_fields = ("get_image",)
     actions = ["publish", "unpublish"]
     list_editable = ("is_published",)
-    search_fields = ("title", "category__title")
+    search_fields = ("title", "categories__title")
 
     def get_preview(self, obj):
         return mark_safe(f'<img src={obj.preview.url} style="'
