@@ -26,7 +26,7 @@ admin.site.register(Comment)
 
 @admin.register(BlogUser)
 class AdminModelPost(admin.ModelAdmin):
-    list_display = ('full_name', 'get_preview', 'email', 'is_staff')
+    list_display = ('full_name', 'email', 'is_staff')
     readonly_fields = ("get_image",)
 
     def get_preview(self, obj):
@@ -45,7 +45,7 @@ class AdminModelPost(admin.ModelAdmin):
 
 @admin.register(Post)
 class AdminModelPost(admin.ModelAdmin):
-    list_display = ('title', 'user', 'created_at', 'is_published')
+    list_display = ('title', 'get_preview', 'user', 'created_at', 'is_published')
     list_filter = ('created_at', 'user')
     readonly_fields = ("get_image",)
     actions = ["publish", "unpublish"]
