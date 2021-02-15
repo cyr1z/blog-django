@@ -31,7 +31,7 @@ class AdminModelUser(admin.ModelAdmin):
     readonly_fields = ("get_image",)
     actions = ["deactivate", "activate"]
     list_editable = ("is_active",)
-    search_fields = ("full_name", "username", "email")
+    search_fields = ("first_name", "last_name", "username", "email")
 
     def get_preview(self, obj):
         return mark_safe(
