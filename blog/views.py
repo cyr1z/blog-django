@@ -51,7 +51,7 @@ class PostListView(ListView):
     model = Post
     paginate_by = 5
     template_name = 'all_posts.html'
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_published=True)
     context_object_name = 'posts_list'
 
     def get_queryset(self):
@@ -118,7 +118,7 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         # add posts pagination
-        all_posts = self.get_object().category_posts.all()
+        all_posts = self.get_object().category_posts.filter(is_published=True)
         paginator = Paginator(all_posts, 5)
         page = self.request.GET.get('page', 1)
         posts = paginator.get_page(page)
@@ -153,11 +153,11 @@ class MainPage(TemplateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         # add latest post
-        latest_post = Post.objects.order_by('-published_at').first()
+        latest_post = Post.objects.order_by('-published_at').filter(is_published=True).first()
         if latest_post:
             context.update({'latest_post': latest_post})
         # add 3 next latest posts
-        next_three_posts = Post.objects.all().order_by('-published_at')[1:4]
+        next_three_posts = Post.objects.filter(is_published=True).order_by('-published_at')[1:4]
         if next_three_posts:
             context.update({'next_three_posts': next_three_posts})
         # add pinned top post

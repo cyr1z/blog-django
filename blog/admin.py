@@ -45,9 +45,10 @@ class AdminModelPost(admin.ModelAdmin):
 
 @admin.register(Post)
 class AdminModelPost(admin.ModelAdmin):
-    list_display = ('title', 'get_preview', 'user', 'created_at')
+    list_display = ('title', 'get_preview', 'user', 'created_at', 'is_published')
     list_filter = ('created_at', 'user')
     readonly_fields = ("get_image",)
+    actions = ["publish", "unpublish"]
 
     def get_preview(self, obj):
         return mark_safe(f'<img src={obj.preview.url} style="'
@@ -59,8 +60,32 @@ class AdminModelPost(admin.ModelAdmin):
                          f'border: 1px solid #ddd;  border-radius: 3px;'
                          f'padding: 5px; max-width: 160px; max-height: 160"')
 
+    def unpublish(self, request, queryset):
+        """Unpublish"""
+        row_update = queryset.update(is_published=False)
+        if row_update == 1:
+            message_bit = "1 post updated"
+        else:
+            message_bit = f"{row_update} posts updated"
+        self.message_user(request, f"{message_bit}")
+
+    def publish(self, request, queryset):
+        """Post"""
+        row_update = queryset.update(is_published=True)
+        if row_update == 1:
+            message_bit = "1 post updated"
+        else:
+            message_bit = f"{row_update} posts updated"
+        self.message_user(request, f"{message_bit}")
+
+    publish.short_description = "publish"
+    publish.allowed_permissions = ('change',)
+    unpublish.short_description = "unpublish"
+    unpublish.allowed_permissions = ('change',)
+
     get_preview.short_description = "Image"
     get_image.short_description = "Image"
+
 
 class ImagesInline(admin.StackedInline):
     model = AlbumImage
@@ -69,6 +94,7 @@ class ImagesInline(admin.StackedInline):
 
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="100" height="110"')
+
 
 @admin.register(Album)
 class AlbumModelAdmin(admin.ModelAdmin):
