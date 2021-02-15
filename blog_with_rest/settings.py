@@ -199,7 +199,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 SOCIAL_AUTH_CLEAN_USERNAMES = True
 
 DEFAULT_AVATAR = '/avatar.png'
-AVATAR_TEMPLATE = '<img src="{}" alt="{}" class="img-fluid" style="border-radius: 50%;">'
+AVATAR_TEMPLATE = '<img src="{}" alt="{}" class="img-fluid" ' \
+                  'style="border-radius: 50%; max-width: 100%; max-height: 100%;">'
 
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = 'upload/'
