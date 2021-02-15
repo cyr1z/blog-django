@@ -29,6 +29,7 @@ class AdminModelUser(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'is_staff', 'is_active',
                     'get_preview')
     readonly_fields = ("get_image",)
+    actions = ["deactivate", "activate"]
 
     def get_preview(self, obj):
         return mark_safe(
