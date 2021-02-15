@@ -45,7 +45,7 @@ class AdminModelPost(admin.ModelAdmin):
 
 @admin.register(Post)
 class AdminModelPost(admin.ModelAdmin):
-    list_display = ('title', 'get_preview', 'user', 'created_at', 'is_published')
+    list_display = ('title', 'user', 'created_at', 'is_published')
     list_filter = ('created_at', 'user')
     readonly_fields = ("get_image",)
     actions = ["publish", "unpublish"]
