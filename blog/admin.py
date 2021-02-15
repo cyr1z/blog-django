@@ -19,17 +19,63 @@ from .models import Category, BlogUser, Tag, Post, Comment, Album, AlbumImage, \
 
 
 admin.site.register(Category)
-admin.site.register(BlogUser)
+
 admin.site.register(Tag)
-admin.site.register(Post)
 admin.site.register(Comment)
+
+
+@admin.register(BlogUser)
+class AdminModelPost(admin.ModelAdmin):
+    list_display = ('full_name', 'get_preview', 'email', 'is_staff')
+    readonly_fields = ("get_image",)
+
+    def get_preview(self, obj):
+        return mark_safe(f'<img src={obj.avatar_image.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 60px; max-height: 60"')
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.avatar_image.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 160px; max-height: 160"')
+
+    get_preview.short_description = "Image"
+    get_image.short_description = "Image"
+
+
+@admin.register(Post)
+class AdminModelPost(admin.ModelAdmin):
+    list_display = ('title', 'get_preview', 'user', 'created_at')
+    list_filter = ('created_at', 'user')
+    readonly_fields = ("get_image",)
+
+    def get_preview(self, obj):
+        return mark_safe(f'<img src={obj.preview.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 60px; max-height: 60"')
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.preview.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 160px; max-height: 160"')
+
+    get_preview.short_description = "Image"
+    get_image.short_description = "Image"
 
 
 @admin.register(Album)
 class AlbumModelAdmin(admin.ModelAdmin):
     form = AlbumForm
-    list_display = ('title', 'thumb')
+    list_display = ('title', 'get_preview')
     list_filter = ('created_at',)
+    readonly_fields = ("get_preview",)
+
+    def get_preview(self, obj):
+        return mark_safe(f'<img src={obj.thumb.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 160px; max-height: 160px"')
+
+    get_preview.short_description = "Image"
 
     def save_model(self, request, obj, form, change):
         if form.is_valid():
@@ -65,8 +111,21 @@ class AlbumModelAdmin(admin.ModelAdmin):
 
 @admin.register(AlbumImage)
 class AlbumImageModelAdmin(admin.ModelAdmin):
-    list_display = ('alt', 'album')
+    list_display = ('alt', 'album', 'get_preview')
     list_filter = ('album',)
+    readonly_fields = ("get_image",)
+
+    def get_preview(self, obj):
+        return mark_safe(f'<img src={obj.image.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 60px; max-height: 60"')
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} style="'
+                         f'border: 1px solid #ddd;  border-radius: 3px;'
+                         f'padding: 5px; max-width: 160px; max-height: 160"')
+
+    get_preview.short_description = "Image"
 
 
 class SingletonModelAdmin(admin.ModelAdmin):

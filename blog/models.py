@@ -202,7 +202,8 @@ class Post(models.Model):
 
     @property
     def clean_text(self):
-        return BeautifulSoup(self.text).get_text().strip()
+        return BeautifulSoup(
+            self.text, features="html.parser").get_text().strip()
 
     @property
     def short_text(self):
@@ -381,7 +382,8 @@ class AlbumImage(models.Model):
         format='JPEG',
         options={'quality': 80}
     )
-    album = models.ForeignKey(Album, on_delete=models.PROTECT)
+    album = models.ForeignKey(Album, on_delete=models.PROTECT,
+                              related_name='album_images')
     alt = models.CharField(max_length=255, default=uuid.uuid4)
     width = models.IntegerField(default=0)
     height = models.IntegerField(default=0)
