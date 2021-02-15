@@ -30,11 +30,12 @@ class AdminModelUser(admin.ModelAdmin):
     readonly_fields = ("get_image",)
 
     def get_preview(self, obj):
-        return mark_safe(f'<div style="height: 42px; display: block; "'
+        return mark_safe(f'<div style="height: 42px; display: block; box-sizing: border-box;"'
                          f'>{obj.avatar}</div>')
 
     def get_image(self, obj):
-        return mark_safe(f'<div style="height: 160px; display: block;">{obj.avatar}</div>')
+        return mark_safe(f'<div style="height: 160px; display: block; box-sizing: border-box;"'
+                         f'>{obj.avatar}</div>')
 
     get_preview.short_description = "Avatar"
     get_image.short_description = "Avatar"
