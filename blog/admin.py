@@ -26,7 +26,7 @@ admin.site.register(Comment)
 
 @admin.register(BlogUser)
 class AdminModelUser(admin.ModelAdmin):
-    list_display = ('full_name', 'email', 'is_staff')
+    list_display = ('full_name', 'email', 'is_staff', 'get_preview')
     readonly_fields = ("get_image",)
 
     def get_preview(self, obj):
