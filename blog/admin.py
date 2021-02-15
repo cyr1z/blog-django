@@ -52,14 +52,14 @@ class AdminModelUser(admin.ModelAdmin):
 
     def activate(self, request, queryset):
         """activate users"""
-        row_update = queryset.update(is_published=True)
+        row_update = queryset.update(is_active=True)
         if row_update == 1:
             message_bit = "1 user activated"
         else:
             message_bit = f"{row_update} users activated"
         self.message_user(request, f"{message_bit}")
 
-    activate.short_description = "publish"
+    activate.short_description = "activate"
     activate.allowed_permissions = ('change',)
     deactivate.short_description = "deactivate"
     deactivate.allowed_permissions = ('change',)
