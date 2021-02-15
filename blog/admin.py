@@ -25,22 +25,10 @@ admin.site.register(Comment)
 
 
 @admin.register(BlogUser)
-class AdminModelPost(admin.ModelAdmin):
-    list_display = ('full_name', 'email', 'is_staff')
-    readonly_fields = ("get_image",)
+class AdminModelUser(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'is_staff', 'avatar')
+    readonly_fields = ("avatar",)
 
-    def get_preview(self, obj):
-        return mark_safe(f'<img src={obj.avatar_image.url} style="'
-                         f'border: 1px solid #ddd;  border-radius: 3px;'
-                         f'padding: 5px; max-width: 60px; max-height: 60"')
-
-    def get_image(self, obj):
-        return mark_safe(f'<img src={obj.avatar_image.url} style="'
-                         f'border: 1px solid #ddd;  border-radius: 3px;'
-                         f'padding: 5px; max-width: 160px; max-height: 160"')
-
-    get_preview.short_description = "Image"
-    get_image.short_description = "Image"
 
 
 @admin.register(Post)
