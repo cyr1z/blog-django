@@ -201,7 +201,7 @@ SOCIAL_AUTH_CLEAN_USERNAMES = True
 DEFAULT_AVATAR = '/avatar.png'
 AVATAR_TEMPLATE = '<img src="{}" alt="{}" class="img-fluid" ' \
                   'style="border-radius: 50%; max-width: 100%;' \
-                  ' max-height: 100%; border: 1px solid #ddd; padding: 5px;">'
+                  ' max-height: 100%; border: 1px solid #ddd; padding: 2px;">'
 
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = 'upload/'
