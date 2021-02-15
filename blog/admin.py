@@ -62,6 +62,13 @@ class AdminModelPost(admin.ModelAdmin):
     get_preview.short_description = "Image"
     get_image.short_description = "Image"
 
+class ImagesInline(admin.StackedInline):
+    model = AlbumImage
+    extra = 1
+    readonly_fields = ("get_image",)
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} width="100" height="110"')
 
 @admin.register(Album)
 class AlbumModelAdmin(admin.ModelAdmin):
@@ -69,6 +76,7 @@ class AlbumModelAdmin(admin.ModelAdmin):
     list_display = ('title', 'get_preview')
     list_filter = ('created_at',)
     readonly_fields = ("get_preview",)
+    inlines = [ImagesInline, ]
 
     def get_preview(self, obj):
         return mark_safe(f'<img src={obj.thumb.url} style="'
