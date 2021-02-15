@@ -30,6 +30,8 @@ class AdminModelUser(admin.ModelAdmin):
                     'get_preview')
     readonly_fields = ("get_image",)
     actions = ["deactivate", "activate"]
+    list_editable = ("is_active",)
+    search_fields = ("full_name", "username", "email")
 
     def get_preview(self, obj):
         return mark_safe(
@@ -75,6 +77,8 @@ class AdminModelPost(admin.ModelAdmin):
     list_filter = ('created_at', 'user')
     readonly_fields = ("get_image",)
     actions = ["publish", "unpublish"]
+    list_editable = ("is_published",)
+    search_fields = ("title", "category__title")
 
     def get_preview(self, obj):
         return mark_safe(f'<img src={obj.preview.url} style="'
