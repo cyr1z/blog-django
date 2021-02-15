@@ -30,12 +30,37 @@ class AdminModelUser(admin.ModelAdmin):
     readonly_fields = ("get_image",)
 
     def get_preview(self, obj):
-        return mark_safe(f'<div style="height: 42px; display: block; box-sizing: border-box;"'
-                         f'>{obj.avatar}</div>')
+        return mark_safe(
+            f'<div style="height: 42px; display: block; box-sizing: border-box;"'
+            f'>{obj.avatar}</div>')
 
     def get_image(self, obj):
-        return mark_safe(f'<div style="height: 160px; display: block; box-sizing: border-box;"'
-                         f'>{obj.avatar}</div>')
+        return mark_safe(
+            f'<div style="height: 160px; display: block; box-sizing: border-box;"'
+            f'>{obj.avatar}</div>')
+
+    def deactivate(self, request, queryset):
+        """deactivate users"""
+        row_update = queryset.update(is_active=False)
+        if row_update == 1:
+            message_bit = "1 user deactivated"
+        else:
+            message_bit = f"{row_update} users deactivated"
+        self.message_user(request, f"{message_bit}")
+
+    def activate(self, request, queryset):
+        """activate users"""
+        row_update = queryset.update(is_published=True)
+        if row_update == 1:
+            message_bit = "1 user activated"
+        else:
+            message_bit = f"{row_update} users activated"
+        self.message_user(request, f"{message_bit}")
+
+    activate.short_description = "publish"
+    activate.allowed_permissions = ('change',)
+    deactivate.short_description = "deactivate"
+    deactivate.allowed_permissions = ('change',)
 
     get_preview.short_description = "Avatar"
     get_image.short_description = "Avatar"
@@ -43,7 +68,8 @@ class AdminModelUser(admin.ModelAdmin):
 
 @admin.register(Post)
 class AdminModelPost(admin.ModelAdmin):
-    list_display = ('title', 'get_preview', 'user', 'created_at', 'is_published')
+    list_display = (
+    'title', 'get_preview', 'user', 'created_at', 'is_published')
     list_filter = ('created_at', 'user')
     readonly_fields = ("get_image",)
     actions = ["publish", "unpublish"]
